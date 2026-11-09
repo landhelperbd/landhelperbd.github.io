@@ -2,77 +2,417 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LandHelper BD</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, 'Hind Siliguri', SolaimanLipi, sans-serif; }
-    body { width: 340px; background: #f8fafc; color: #1e293b; padding: 0; }
-    .header { background: linear-gradient(135deg, #059669 0%, #0284c7 100%); color: white; padding: 14px 16px; text-align: center; }
-    .header h1 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
-    .header p { font-size: 11px; opacity: 0.9; }
-    .badge { display: inline-block; background: rgba(255,255,255,0.2); font-size: 9px; padding: 2px 6px; border-radius: 10px; margin-top: 4px; }
-    .content { padding: 16px; }
-    .form-group { margin-bottom: 12px; }
-    label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #334155; }
-    select, input { width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; transition: all 0.2s; background: white; }
-    select:focus, input:focus { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
-    .hint { font-size: 10px; color: #64748b; margin-top: 3px; }
-    .btn-submit { width: 100%; background: #059669; color: white; border: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .btn-submit:hover { background: #047857; }
-    .notice-box { display: none; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-size: 11px; padding: 6px 10px; border-radius: 6px; margin-bottom: 12px; text-align: center; line-height: 1.4; }
-    .notice-box a { color: #2563eb; font-weight: 700; text-decoration: underline; }
-    .footer { text-align: center; padding: 10px 16px 14px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; background: white; }
-    .footer a { color: #0284c7; text-decoration: none; font-weight: 600; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 360px;
+      background: #090d16;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      padding: 16px;
+      user-select: none;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .logo-badge {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      font-size: 20px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+    }
+    .title { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.3px; }
+    .subtitle { font-size: 11px; color: #94a3b8; }
+    
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      background: #0d1322;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+    }
+    .nav-tab {
+      flex: 1;
+      text-align: center;
+      padding: 7px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tab.active {
+      background: #10b981;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .card {
+      background: #101626;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .input-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 5px;
+    }
+    input[type="text"], input[type="tel"] {
+      width: 100%;
+      background: #0a0f1a;
+      border: 1px solid #334155;
+      padding: 9px 11px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    input[type="text"]:focus, input[type="tel"]:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+    .field-group { margin-bottom: 11px; }
+
+    /* Plans selection */
+    .plan-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 11px;
+    }
+    .plan-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: #0a0f1a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .plan-option:hover { border-color: #334155; }
+    .plan-option.selected {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.08);
+    }
+    .plan-title { font-size: 12px; font-weight: 700; color: #f1f5f9; display: flex; align-items: center; gap: 6px; }
+    .plan-price { font-size: 13px; font-weight: 800; color: #34d399; }
+    .plan-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: rgba(16, 185, 129, 0.25); color: #6ee7b7; }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+    .btn:hover { opacity: 0.95; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-secondary {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      box-shadow: none;
+      margin-top: 8px;
+    }
+    .btn-secondary:hover { background: #334155; color: #fff; }
+
+    /* 6-Digit License Display Box */
+    .key-display-box {
+      background: #090e1a;
+      border: 2px dashed #10b981;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin: 12px 0;
+    }
+    .key-digits {
+      font-family: 'Consolas', monospace;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 6px;
+      color: #34d399;
+      text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+      margin-bottom: 8px;
+    }
+    .copy-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover { background: #334155; border-color: #10b981; }
+
+    .notice-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+      font-size: 11px;
+      line-height: 1.5;
+      padding: 9px 11px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    /* Active State Details */
+    .active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .active-badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    #statusMessage {
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.4;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+    }
+    .status-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+    .status-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+    }
+    .status-pending {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+    }
+    
+    .footer {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 11px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .change-key-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #64748b;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .change-key-link:hover { color: #94a3b8; }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>LandHelper BD</h1>
-    <p>নামজারি ১৮+ জন্মনিবন্ধন ও প্রতিনিধি সহকারী</p>
-    <span class="badge" id="versionBadge">v2.1 Stable</span>
+    <img src="icon.png" class="logo-badge" alt="Logo" style="object-fit:cover;background:#ffffff;border-radius:10px;border:1px solid rgba(16,185,129,0.35);box-shadow:0 0 12px rgba(16,185,129,0.2);width:38px;height:38px;">
+    <div>
+      <div class="title">Land Helper BD Pro</div>
+      <div class="subtitle">SaaS Automation Assistant</div>
+    </div>
   </div>
 
-  <div class="content">
-    <div id="noticeBox" class="notice-box"></div>
+  <!-- Navigation Tabs (Only shown when not active) -->
+  <div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" id="tabRegister">নতুন আবেদন</div>
+    <div class="nav-tab" id="tabLogin">লাইসেন্স লগইন</div>
+  </div>
 
-    <div class="form-group">
-      <label for="division">বিভাগ নির্বাচন করুন</label>
-      <select id="division">
-        <option value="5">রাজশাহী</option>
-        <option value="3">ঢাকা</option>
-        <option value="2">চট্টগ্রাম</option>
-        <option value="4">খুলনা</option>
-        <option value="6">রংপুর</option>
-        <option value="7">সিলেট</option>
-        <option value="8">ময়মনসিংহ</option>
-        <option value="1">বরিশাল</option>
-      </select>
+  <!-- 1. Registration Card -->
+  <div id="registerCard" class="card">
+    <div class="field-group">
+      <label class="input-label" for="custName">প্রতিষ্ঠানের নাম / ব্যবসার নাম:</label>
+      <input type="text" id="custName" placeholder="যেমন: মেসার্স আলম এন্টারপ্রাইজ / আপনার নাম" autocomplete="organization">
+    </div>
+    
+    <div class="field-group">
+      <label class="input-label" for="custPhone">সচল মোবাইল নম্বর:</label>
+      <input type="tel" id="custPhone" placeholder="যেমন: 017xxxxxxxx" autocomplete="tel">
     </div>
 
-    <div class="form-group">
-      <label for="appId">আবেদন নম্বর <span style="color:#ef4444">*</span></label>
-      <input type="text" id="appId" placeholder="যেমন: ৯৯৩৪৭২৫ বা 9934725" autofocus required>
-      <div class="hint">বাংলা বা ইংরেজি সংখ্যা স্বয়ংক্রিয় কনভার্ট হবে।</div>
+    <div class="field-group">
+      <label class="input-label">সাবস্ক্রিপশন প্যাকেজ নির্বাচন করুন:</label>
+      <div class="plan-grid">
+        <label class="plan-option" id="planOptDemo">
+          <input type="radio" name="planChoice" value="demo" style="display:none;">
+          <div class="plan-title">
+            🎁 ডেমো টেস্ট (ফ্রি ট্রায়াল)
+            <span class="plan-badge" style="background:rgba(59,130,246,0.25);color:#93c5fd;">২ দিন ফ্রি</span>
+          </div>
+          <div class="plan-price" style="color:#60a5fa;">০ ৳ (ফ্রি)</div>
+        </label>
+        <label class="plan-option" id="planOpt1m">
+          <input type="radio" name="planChoice" value="1m" style="display:none;">
+          <div class="plan-title">১ মাসের প্ল্যান</div>
+          <div class="plan-price">১,০০০ ৳</div>
+        </label>
+        <label class="plan-option selected" id="planOpt6m">
+          <input type="radio" name="planChoice" value="6m" checked style="display:none;">
+          <div class="plan-title">
+            ৬ মাসের প্ল্যান
+            <span class="plan-badge">৩৩% সাশ্রয়</span>
+          </div>
+          <div class="plan-price">৪,০০০ ৳</div>
+        </label>
+        <label class="plan-option" id="planOpt1y">
+          <input type="radio" name="planChoice" value="1y" style="display:none;">
+          <div class="plan-title">
+            ১ বছরের প্ল্যান
+            <span class="plan-badge">৪২% মেগা সাশ্রয়</span>
+          </div>
+          <div class="plan-price">৭,০০০ ৳</div>
+        </label>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="nid">জাতীয় পরিচয়পত্র নম্বর (ঐচ্ছিক)</label>
-      <input type="text" id="nid" placeholder="না থাকলে ফাঁকা বা ০ রাখুন">
-      <div class="hint">ফাঁকা রাখলে স্বয়ংক্রিয়ভাবে ডিফল্ট বসে যাবে।</div>
+    <div class="field-group">
+      <label class="input-label" for="trxId">পেমেন্ট TrxID / শেষ ৪ ডিজিট (ঐচ্ছিক):</label>
+      <input type="text" id="trxId" placeholder="বিকাশ / নগদ পেমেন্টের রেফারেন্স বা TrxID">
     </div>
 
-    <button id="btnSearch" class="btn-submit">
-      <span>🔍</span>
-      <span>তথ্য দেখুন ও আবেদন পেজে যান</span>
+    <button class="btn" id="submitRegBtn">
+      <span>🚀 অনুরোধ জমা দিন ও লাইসেন্স পান</span>
     </button>
   </div>
 
-  <div class="footer">
-    হেল্পলাইন: <a href="https://wa.me/8801327727050" target="_blank">+8801327-727050</a> (WhatsApp)
+  <!-- 2. Login Card (for existing 6-digit key holders) -->
+  <div id="loginCard" class="card" style="display: none;">
+    <div class="field-group">
+      <label class="input-label" for="inputKey">আপনার ৬-ডিজিটের লাইসেন্স কি:</label>
+      <input type="text" id="inputKey" placeholder="যেমন: 742918" maxlength="12" style="font-size:16px;letter-spacing:2px;font-family:monospace;text-align:center;">
+    </div>
+    <button class="btn" id="verifyBtn">
+      <span>🔓 যাচাই ও সক্রিয় করুন</span>
+    </button>
   </div>
 
-  <script src="cryptojs-aes.min.js"></script>
-  <script src="cryptojs-aes-format.js"></script>
+  <!-- 3. Pending Approval Card (Shown right after registration) -->
+  <div id="pendingCard" class="card" style="display: none; text-align: center;">
+    <div style="font-size: 13px; color: #94a3b8; margin-bottom: 6px;">আপনার লাইসেন্স কি তৈরি হয়েছে:</div>
+    
+    <div class="key-display-box">
+      <div class="key-digits" id="pendingKeyDisplay">------</div>
+      <button class="copy-btn" id="copyPendingKeyBtn">
+        <span>📋 লাইসেন্স কি কপি করুন</span>
+      </button>
+    </div>
+
+    <div class="notice-box">
+      📋 <strong>এটি আপনার গোপনীয় লাইসেন্স কি, সংরক্ষণ করুন।</strong><br>
+      পরবর্তীতে যেকোনো প্রয়োজনে বা অন্য ব্রাউজারে লগইনের জন্য এই কি-টি ব্যবহার করতে পারবেন।
+    </div>
+
+    <div style="margin-top: 12px; font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+      ⏳ আপনার অনুরোধটি অ্যাডমিন পর্যালোচনায় রয়েছে। অনুমোদন পাওয়ার সাথে সাথে এক্সটেনশন স্বয়ংক্রিয়ভাবে সচল হবে।
+    </div>
+
+    <button class="btn btn-secondary" id="refreshStatusBtn" style="margin-top: 12px;">
+      <span>🔄 স্ট্যাটাস রিফ্রেশ করুন</span>
+    </button>
+    
+    <div>
+      <span class="change-key-link" id="backToRegLink">← অন্য তথ্য দিয়ে আবেদন করুন</span>
+    </div>
+  </div>
+
+  <!-- 4. Active Card (Shown when verified and active) -->
+  <div id="activeCard" class="card" style="display: none; text-align: center;">
+    <div class="active-badge">সক্রিয় (Active)</div>
+    
+    <div class="key-display-box" style="margin: 8px 0;">
+      <div class="key-digits" id="activeKeyDisplay">------</div>
+      <button class="copy-btn" id="copyActiveKeyBtn">
+        <span>📋 লাইসেন্স কি কপি করুন</span>
+      </button>
+    </div>
+
+    <div class="notice-box" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.3);color:#6ee7b7;margin-bottom:12px;">
+      📋 <strong>এটি আপনার গোপনীয় লাইসেন্স কি, সংরক্ষণ করুন।</strong>
+    </div>
+
+    <div style="font-size: 12px; color: #94a3b8; line-height: 1.5; margin-bottom: 12px;">
+      <span id="activePlanText" style="color:#f1f5f9;font-weight:700;">প্রো অটোমেশন সাবস্ক্রিপশন</span><br>
+      <span style="font-size: 11px; color: #10b981; margin-top: 4px; display: inline-block;">✓ নামজারি পোর্টালে টুলবার স্বয়ংক্রিয়ভাবে সক্রিয় রয়েছে</span>
+    </div>
+
+    <button class="btn" id="openPortalBtn">
+      <span>🌐 নামজারি পোর্টাল ওপেন করুন</span>
+    </button>
+    
+    <div>
+      <span class="change-key-link" id="changeKeyLink">🔄 লাইসেন্স কি পরিবর্তন করুন</span>
+    </div>
+  </div>
+
+  <!-- Status / Alert Area -->
+  <div id="statusMessage"></div>
+
+  <div class="footer">
+    <span>🛡️ Land Helper BD Pro</span>
+    <span>•</span>
+    <span>v1.2.0 Final</span>
+  </div>
+
   <script src="popup.js"></script>
 </body>
 </html>

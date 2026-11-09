@@ -1,20 +1,47 @@
 {
   "manifest_version": 3,
-  "name": "LandHelper - নামজারি ১৮+ জন্মনিবন্ধন ও প্রতিনিধি আবেদন",
-  "version": "2.1.0",
-  "description": "১৮+ জন্মনিবন্ধন দিয়ে আবেদন ও প্রতিনিধি হিসেবে নামজারি আবেদন প্রক্রিয়াকরণের নির্ভরযোগ্য সহকারী ব্রাউজার টুল।",
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icon.png"
-  },
+  "name": "Land Helper BD | Pro Assistant",
+  "version": "1.2.0",
+  "description": "সরকারি নামজারি পোর্টালে (mutation.land.gov.bd) কাজ সহজ ও দ্রুত করার জন্য স্বয়ংক্রিয় প্রো সহকারী এক্সটেনশন।",
   "icons": {
-    "128": "icon.png"
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "Land Helper BD Pro"
   },
   "permissions": [
     "storage",
-    "tabs"
+    "scripting",
+    "activeTab"
   ],
   "host_permissions": [
-    "https://landhelperbd.github.io/*"
+    "https://mutation.land.gov.bd/*",
+    "https://*.land.gov.bd/*",
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mutation.land.gov.bd/*",
+        "https://*.land.gov.bd/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
   ]
 }
