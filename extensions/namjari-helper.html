@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LandHelper - নামজারি ও ডিসিআর সহকারী (ডাউনলোড ও ইনস্টল নির্দেশিকা)</title>
+  <meta name="description" content="ই-নামজারি ট্র্যাকিং, ডিসিআর ফি প্রদান ও খতিয়ান ডাউনলোডের দ্রুততম ব্রাউজার এক্সটেনশন ডাউনলোড করুন।">
+  <link rel="icon" type="image/png" href="../icon.png">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Hind Siliguri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Hind Siliguri', sans-serif; }
+    .tab-active { border-color: #059669; color: #059669; background: #ecfdf5; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3">
+        <img src="../icon.png" alt="Logo" class="w-9 h-9 rounded-xl shadow-md border border-emerald-500/30">
+        <span class="text-lg font-bold bg-gradient-to-r from-emerald-600 to-sky-600 bg-clip-text text-transparent">LandHelper BD</span>
+      </a>
+      <a href="../index.html" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-emerald-600 transition flex items-center gap-1.5">
+        <span>← মূল হোমপেজে ফিরুন</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Product Hero & Download Area -->
+  <section class="pt-12 pb-16 px-4 sm:px-6 max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold mb-4">
+      <span>★ লেটেস্ট ভার্সন: v2.1 (নভেম্বর ২০২৬ কমপ্লায়েন্ট)</span>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+      LandHelper - নামজারি ও ডিসিআর সহকারী
+    </h1>
+    <p class="text-base text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
+      সরকারি আপডেটে কাস্টমার আইডি ছাড়া ডিসিআর ফি কাটতে না পারার সমস্যা চিরতরে সমাধান করুন। ওটিপি ছাড়াই কাস্টমারের ডিসিআর ফি প্রদান, খসড়া খতিয়ান ও পেমেন্ট রশিদ প্রিন্ট করার অল-ইন-ওয়ান এক্সটেনশন।
+    </p>
+
+    <!-- Download Card -->
+    <div class="bg-white border-2 border-emerald-500 rounded-2xl p-6 sm:p-8 shadow-xl shadow-emerald-500/10 max-w-xl mx-auto mb-12">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <span class="text-4xl">📦</span>
+        <div class="text-left">
+          <div class="text-base font-bold text-slate-900">landhelper-namjari-v2.1.zip</div>
+          <div class="text-xs text-slate-500">সাইজ: ~১০ KB • কোনো গুগল ড্রাইভ ঝামেলা নেই • সরাসরি ডাউনলোড</div>
+        </div>
+      </div>
+      
+      <a href="../downloads/landhelper-namjari-v2.1.zip" download class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-emerald-500/25 transition flex items-center justify-center gap-3 text-lg group">
+        <span class="text-2xl group-hover:translate-y-0.5 transition">⬇️</span>
+        <span>সরাসরি এক্সটেনশন ডাউনলোড করুন (.zip)</span>
+      </a>
+      <div class="mt-3 text-xs text-slate-400">১ ক্লিকেই জিপ ফাইল ডাউনলোড হবে। এরপর নিচের নির্দেশিকা অনুযায়ী ইনস্টল করুন।</div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Installation Tabs -->
+  <section class="py-12 bg-white border-t border-slate-200 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">কীভাবে ইনস্টল ও চালু করবেন?</h2>
+        <p class="text-slate-600 text-sm mt-2">আপনার ডিভাইস অনুযায়ী নিচের ট্যাবে ক্লিক করে নির্দেশিকা দেখুন</p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex border-b border-slate-200 mb-8 max-w-md mx-auto">
+        <button id="btnTabPc" onclick="switchTab('pc')" class="flex-1 py-3 text-sm font-bold border-b-2 tab-active transition flex items-center justify-center gap-2">
+          <span>💻</span>
+          <span>কম্পিউটার (Chrome / Edge)</span>
+        </button>
+        <button id="btnTabMobile" onclick="switchTab('mobile')" class="flex-1 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center justify-center gap-2">
+          <span>📱</span>
+          <span>মোবাইল (Android - Kiwi/Mises)</span>
+        </button>
+      </div>
+
+      <!-- PC Guide Content -->
+      <div id="guidePc" class="space-y-6">
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center shrink-0">১</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">ফাইলটি Extract (আনজিপ) করুন</h4>
+            <p class="text-sm text-slate-600">ডাউনলোড হওয়া <code class="bg-slate-200 px-1.5 py-0.5 rounded text-xs">landhelper-namjari-v2.1.zip</code> ফাইলের ওপর মাউসের রাইট-ক্লিক করে <strong>"Extract All..."</strong> বা আনজিপ করুন।</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center shrink-0">২</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">ব্রাউজারে Extensions পেজে যান</h4>
+            <p class="text-sm text-slate-600">গুগল ক্রোম ব্রাউজারের অ্যাড্রেস বারে লিখুন: <code class="bg-slate-200 px-1.5 py-0.5 rounded text-xs font-mono">chrome://extensions</code> এবং এন্টার দিন।</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center shrink-0">৩</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">Developer Mode অন করে 'Load Unpacked' দিন</h4>
+            <p class="text-sm text-slate-600">পেজের উপরের ডানপাশে থাকা <strong>"Developer mode"</strong> টগলটি অন করুন। এরপর বামপাশে দৃশ্যমান হওয়া <strong>"Load unpacked"</strong> বাটনে ক্লিক করে আনজিপ করা ফোল্ডারটি সিলেক্ট করে দিন।</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center shrink-0">৪</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">ব্রাউজারে পিন করুন এবং কাজ শুরু করুন</h4>
+            <p class="text-sm text-slate-600">ব্রাউজারের উপরের ডানপাশের পাজল (🧩) আইকনে ক্লিক করে LandHelper এক্সটেনশনটি পিন করে নিন। এখন যেকোনো সময় ১ ক্লিকেই পপআপে আবেদন নম্বর দিয়ে কাজ করতে পারবেন!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Guide Content -->
+      <div id="guideMobile" class="hidden space-y-6">
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center shrink-0">১</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">Kiwi Browser বা Mises Browser ডাউনলোড করুন</h4>
+            <p class="text-sm text-slate-600">গুগল প্লে স্টোর থেকে <strong>Kiwi Browser</strong> অথবা <strong>Mises Browser</strong> ইনস্টল করে নিন। সাধারণ ক্রোমে মোবাইল এক্সটেনশন সাপোর্ট করে না, কিন্তু এই ব্রাউজারগুলোতে শতভাগ সাপোর্ট করে।</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center shrink-0">২</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">জিপ ফাইল ডাউনলোড ও আনজিপ করুন</h4>
+            <p class="text-sm text-slate-600">আমাদের ওপরের সবুজ বাটন থেকে <code class="bg-slate-200 px-1.5 py-0.5 rounded text-xs">.zip</code> ফাইলটি ডাউনলোড করে মোবাইলের ফাইল ম্যানেজারে আনজিপ (Extract) করুন।</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center shrink-0">৩</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">Kiwi Browser-এ Extensions মেনু ওপেন করুন</h4>
+            <p class="text-sm text-slate-600">Kiwi Browser ওপেন করে উপরের ডানপাশের ৩টি ডটে (⋮) চাপ দিন এবং <strong>"Extensions"</strong> সিলেক্ট করুন।</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="w-9 h-9 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center shrink-0">৪</div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">Developer Mode অন করে ফাইল ধরিয়ে দিন</h4>
+            <p class="text-sm text-slate-600">Extensions পেজে Developer Mode অন করুন। এরপর <strong>"+ (from .zip / .crx / dir)"</strong> এ ক্লিক করে আনজিপ করা ফোল্ডারটি ধরিয়ে দিন। ব্যাস! আপনার মোবাইলেই পিসির মতো পুরো এক্সটেনশন চালু হয়ে যাবে।</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Help & Support -->
+  <section class="py-12 bg-slate-100 text-center px-4">
+    <div class="max-w-xl mx-auto">
+      <h3 class="text-xl font-bold text-slate-900 mb-2">ইনস্টল করতে কোনো সমস্যা হচ্ছে?</h3>
+      <p class="text-sm text-slate-600 mb-6">সরাসরি আমাদের হোয়াটসঅ্যাপে মেসেজ দিন, আমরা স্ক্রিনশেয়ার বা ভিডিও দিয়ে আপনাকে ইনস্টল করিয়ে দেব।</p>
+      <a href="https://wa.me/8801327727050" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow transition">
+        <span>💬</span>
+        <span>হোয়াটসঅ্যাপ হেল্পলাইন: +8801327-727050</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <p>© ২০২৬ LandHelper BD. সর্বস্বত্ব সংরক্ষিত।</p>
+  </footer>
+
+  <script>
+    function switchTab(tab) {
+      const btnPc = document.getElementById('btnTabPc');
+      const btnMobile = document.getElementById('btnTabMobile');
+      const guidePc = document.getElementById('guidePc');
+      const guideMobile = document.getElementById('guideMobile');
+
+      if (tab === 'pc') {
+        btnPc.classList.add('tab-active');
+        btnMobile.classList.remove('tab-active');
+        btnMobile.classList.add('border-transparent', 'text-slate-500');
+        guidePc.classList.remove('hidden');
+        guideMobile.classList.add('hidden');
+      } else {
+        btnMobile.classList.add('tab-active');
+        btnPc.classList.remove('tab-active');
+        btnPc.classList.add('border-transparent', 'text-slate-500');
+        guideMobile.classList.remove('hidden');
+        guidePc.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
