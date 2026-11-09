@@ -1,0 +1,11 @@
+{
+  "version": "2.1.0",
+  "min_version": "2.0.0",
+  "status": "active",
+  "aes_key": "base64:enwzAWfONe4tLyNR1KC5ETWTSCjZlH3ZjCqdZaPTyy8=",
+  "search_url": "https://mutation.land.gov.bd/search-application",
+  "payment_url": "https://mutation.land.gov.bd/payment",
+  "notice": "সিস্টেম স্বাভাবিক ও সক্রিয় রয়েছে।",
+  "update_url": "https://landhelperbd.github.io/extensions/namjari-helper.html",
+  "whatsapp": "8801327727050"
+}

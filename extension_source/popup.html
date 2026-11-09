@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LandHelper BD</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, 'Hind Siliguri', SolaimanLipi, sans-serif; }
+    body { width: 340px; background: #f8fafc; color: #1e293b; padding: 0; }
+    .header { background: linear-gradient(135deg, #059669 0%, #0284c7 100%); color: white; padding: 14px 16px; text-align: center; }
+    .header h1 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+    .header p { font-size: 11px; opacity: 0.9; }
+    .badge { display: inline-block; background: rgba(255,255,255,0.2); font-size: 9px; padding: 2px 6px; border-radius: 10px; margin-top: 4px; }
+    .content { padding: 16px; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #334155; }
+    select, input { width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; transition: all 0.2s; background: white; }
+    select:focus, input:focus { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
+    .hint { font-size: 10px; color: #64748b; margin-top: 3px; }
+    .btn-submit { width: 100%; background: #059669; color: white; border: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-submit:hover { background: #047857; }
+    .notice-box { display: none; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-size: 11px; padding: 6px 10px; border-radius: 6px; margin-bottom: 12px; text-align: center; line-height: 1.4; }
+    .notice-box a { color: #2563eb; font-weight: 700; text-decoration: underline; }
+    .footer { text-align: center; padding: 10px 16px 14px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; background: white; }
+    .footer a { color: #0284c7; text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>LandHelper BD</h1>
+    <p>নামজারি ১৮+ জন্মনিবন্ধন ও প্রতিনিধি সহকারী</p>
+    <span class="badge" id="versionBadge">v2.1 Stable</span>
+  </div>
+
+  <div class="content">
+    <div id="noticeBox" class="notice-box"></div>
+
+    <div class="form-group">
+      <label for="division">বিভাগ নির্বাচন করুন</label>
+      <select id="division">
+        <option value="5">রাজশাহী</option>
+        <option value="3">ঢাকা</option>
+        <option value="2">চট্টগ্রাম</option>
+        <option value="4">খুলনা</option>
+        <option value="6">রংপুর</option>
+        <option value="7">সিলেট</option>
+        <option value="8">ময়মনসিংহ</option>
+        <option value="1">বরিশাল</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="appId">আবেদন নম্বর <span style="color:#ef4444">*</span></label>
+      <input type="text" id="appId" placeholder="যেমন: ৯৯৩৪৭২৫ বা 9934725" autofocus required>
+      <div class="hint">বাংলা বা ইংরেজি সংখ্যা স্বয়ংক্রিয় কনভার্ট হবে।</div>
+    </div>
+
+    <div class="form-group">
+      <label for="nid">জাতীয় পরিচয়পত্র নম্বর (ঐচ্ছিক)</label>
+      <input type="text" id="nid" placeholder="না থাকলে ফাঁকা বা ০ রাখুন">
+      <div class="hint">ফাঁকা রাখলে স্বয়ংক্রিয়ভাবে ডিফল্ট বসে যাবে।</div>
+    </div>
+
+    <button id="btnSearch" class="btn-submit">
+      <span>🔍</span>
+      <span>তথ্য দেখুন ও আবেদন পেজে যান</span>
+    </button>
+  </div>
+
+  <div class="footer">
+    হেল্পলাইন: <a href="https://wa.me/8801327727050" target="_blank">+8801327-727050</a> (WhatsApp)
+  </div>
+
+  <script src="cryptojs-aes.min.js"></script>
+  <script src="cryptojs-aes-format.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

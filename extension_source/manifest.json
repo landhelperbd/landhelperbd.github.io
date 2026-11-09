@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "LandHelper - নামজারি ও ডিসিআর সহকারী",
+  "name": "LandHelper - নামজারি ১৮+ জন্মনিবন্ধন ও প্রতিনিধি আবেদন",
   "version": "2.1.0",
-  "description": "ই-নামজারি ট্র্যাকিং, ডিসিআর ফি প্রদান এবং খতিয়ান ডাউনলোডের দ্রুততম সহকারী টুল।",
+  "description": "১৮+ জন্মনিবন্ধন দিয়ে আবেদন ও প্রতিনিধি হিসেবে নামজারি আবেদন প্রক্রিয়াকরণের নির্ভরযোগ্য সহকারী ব্রাউজার টুল।",
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
@@ -13,5 +13,8 @@
   "permissions": [
     "storage",
     "tabs"
+  ],
+  "host_permissions": [
+    "https://landhelperbd.github.io/*"
   ]
 }
