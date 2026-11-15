@@ -44,26 +44,122 @@ document.addEventListener('DOMContentLoaded', async () => {
     const backToRegLink = document.getElementById('backToRegLink');
     const statusMsg = document.getElementById('statusMessage');
 
-    // Remote Branding & Config Auto-Sync (Realtime without reinstalling)
-    async function syncRemoteBranding() {
+    // Remote Live Notice & Dynamic Config Auto-Sync (100% Free via GitHub Pages)
+    async function syncRemoteConfigAndNotices() {
+        const banner = document.getElementById('remoteNoticeBanner');
+        const titleEl = document.getElementById('noticeTitle');
+        const bodyEl = document.getElementById('noticeBody');
+        const actionBtn = document.getElementById('noticeActionBtn');
+        const closeBtn = document.getElementById('noticeCloseBtn');
+
+        function renderBanner(cfg, dismissedList = []) {
+            if (!banner || !cfg) return;
+
+            // Handle both object and string format for notice
+            let notice = cfg.notice;
+            if (typeof notice === 'string' && notice.trim()) {
+                notice = {
+                    id: 'notice-str-' + notice.length,
+                    enabled: true,
+                    type: 'info',
+                    title: '📢 নোটিশ',
+                    body: notice,
+                    dismissible: true
+                };
+            }
+
+            // Version check: if current version is lower than min_version in config, force update alert
+            const currentVersion = (chrome.runtime && chrome.runtime.getManifest) ? chrome.runtime.getManifest().version : '1.2.0';
+            if (cfg.min_version && isOutdated(currentVersion, cfg.min_version)) {
+                notice = {
+                    id: 'force-update-' + (cfg.version || '1.2.0'),
+                    enabled: true,
+                    type: 'alert',
+                    dismissible: false,
+                    title: '⚠️ জরুরি আপডেট প্রয়োজন!',
+                    body: 'আপনার এক্সটেনশনটি পুরোনো সংস্করণের। নিরবচ্ছিন্ন সেবা পেতে অনুগ্রহ করে এখনই আপডেট করুন।',
+                    actionText: '📥 আপডেট ডাউনলোড করুন',
+                    actionUrl: cfg.update_url || 'https://landhelperbd.github.io/downloads/Land_Helper_BD_Pro_v1.2.zip'
+                };
+            }
+
+            if (!notice || !notice.enabled || (notice.dismissible && dismissedList.includes(notice.id))) {
+                banner.style.display = 'none';
+                return;
+            }
+
+            const noticeType = ['info', 'warning', 'update', 'alert'].includes(notice.type) ? notice.type : 'info';
+            banner.className = 'notice-' + noticeType;
+            titleEl.textContent = notice.title || '📢 নোটিশ';
+            bodyEl.textContent = notice.body || '';
+
+            if (notice.actionText && (notice.actionUrl || cfg.update_url)) {
+                actionBtn.textContent = notice.actionText;
+                actionBtn.href = notice.actionUrl || cfg.update_url;
+                actionBtn.style.display = 'inline-block';
+            } else {
+                actionBtn.style.display = 'none';
+            }
+
+            if (notice.dismissible) {
+                closeBtn.style.display = 'block';
+                closeBtn.onclick = async () => {
+                    banner.style.display = 'none';
+                    const updated = [...new Set([...dismissedList, notice.id])];
+                    await chrome.storage.local.set({ 'lh_dismissed_notices': updated });
+                };
+            } else {
+                closeBtn.style.display = 'none';
+            }
+
+            banner.style.display = 'block';
+        }
+
+        function isOutdated(cur, min) {
+            const c = cur.split('.').map(Number);
+            const m = min.split('.').map(Number);
+            for (let i = 0; i < 3; i++) {
+                if ((c[i] || 0) < (m[i] || 0)) return true;
+                if ((c[i] || 0) > (m[i] || 0)) return false;
+            }
+            return false;
+        }
+
+        // 1. Instant Cache Render (0ms latency)
         try {
-            const res = await fetch("https://landhelperbd.github.io/config.json?_t=" + Date.now(), { cache: "no-store" });
-            if (res.ok) {
-                const cfg = await res.json();
+            const cached = await chrome.storage.local.get(['lh_remote_config', 'lh_dismissed_notices']);
+            if (cached && cached.lh_remote_config) {
+                const cfg = cached.lh_remote_config;
                 if (cfg.app_subtitle) {
                     const sub = document.querySelector('.subtitle');
                     if (sub) sub.innerText = cfg.app_subtitle;
                 }
-                if (cfg.tab_register_title && tabRegister) {
-                    tabRegister.innerText = cfg.tab_register_title;
+                renderBanner(cfg, cached.lh_dismissed_notices || []);
+            }
+        } catch(e) {}
+
+        // 2. Fresh Background Fetch from GitHub Pages
+        try {
+            const res = await fetch("https://landhelperbd.github.io/config.json?_t=" + Date.now(), { cache: "no-store" });
+            if (res.ok) {
+                const freshCfg = await res.json();
+                await chrome.storage.local.set({ 'lh_remote_config': freshCfg });
+                if (freshCfg.app_subtitle) {
+                    const sub = document.querySelector('.subtitle');
+                    if (sub) sub.innerText = freshCfg.app_subtitle;
                 }
-                if (cfg.tab_login_title && tabLogin) {
-                    tabLogin.innerText = cfg.tab_login_title;
+                if (freshCfg.tab_register_title && tabRegister) {
+                    tabRegister.innerText = freshCfg.tab_register_title;
                 }
+                if (freshCfg.tab_login_title && tabLogin) {
+                    tabLogin.innerText = freshCfg.tab_login_title;
+                }
+                const st = await chrome.storage.local.get(['lh_dismissed_notices']);
+                renderBanner(freshCfg, (st && st.lh_dismissed_notices) || []);
             }
         } catch(e) {}
     }
-    syncRemoteBranding();
+    syncRemoteConfigAndNotices();
 
     // Plan Selection Management
     let selectedPlan = '6m';

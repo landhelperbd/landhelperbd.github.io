@@ -201,4 +201,32 @@
     });
     observer.observe(document.documentElement, { childList: true });
 
+    // Remote Dynamic Config & Portal Notice Auto-Sync (100% Free via GitHub Pages)
+    async function syncRemotePortalConfig() {
+        try {
+            const res = await fetch("https://landhelperbd.github.io/config.json?_t=" + Date.now(), { cache: "no-store" });
+            if (!res.ok) return;
+            const cfg = await res.json();
+
+            // 1. If portal notice/alert is enabled in config.json, display clean toast
+            if (cfg.portal_notice && cfg.portal_notice.enabled && cfg.portal_notice.text) {
+                showToast(cfg.portal_notice.text, cfg.portal_notice.bgColor || "#0f172a");
+            }
+
+            // 2. Dynamic button labels if customized
+            if (cfg.buttons) {
+                var resetBtn = document.querySelector('#_lh_bar button:nth-child(2)');
+                if (resetBtn && cfg.buttons.reset_label) {
+                    resetBtn.innerHTML = cfg.buttons.reset_label;
+                }
+                var ageBtn = document.querySelector('#_lh_bar button:nth-child(3)');
+                if (ageBtn && cfg.buttons.age_label) {
+                    ageBtn.innerHTML = cfg.buttons.age_label;
+                }
+            }
+        } catch(e) {}
+    }
+
+    setTimeout(syncRemotePortalConfig, 1200);
+
 })();

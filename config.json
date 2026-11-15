@@ -6,7 +6,25 @@
   "tab_register_title": "রেজিস্ট্রেশন করুন",
   "tab_login_title": "লাইসেন্স কি",
   "status": "active",
-  "notice": "সিস্টেম স্বাভাবিক ও সক্রিয় রয়েছে।",
+  "notice": {
+    "id": "welcome-pro-v1",
+    "enabled": false,
+    "type": "update",
+    "dismissible": true,
+    "title": "🎉 সিস্টেম স্বাভাবিক ও সক্রিয় রয়েছে",
+    "body": "নামজারি পোর্টালে রিসেট বাটন ও ১৮+ মোড সফলভাবে সংযুক্ত করা হয়েছে।",
+    "actionText": "",
+    "actionUrl": ""
+  },
+  "portal_notice": {
+    "enabled": false,
+    "text": "📢 ল্যান্ড হেল্পার বিডি প্রো সফলভাবে সংযুক্ত!",
+    "bgColor": "#0f172a"
+  },
+  "buttons": {
+    "reset_label": "🔄 রিসেট বাটন",
+    "age_label": "🔞 ১৮+ মোড"
+  },
   "update_url": "https://landhelperbd.github.io/downloads/Land_Helper_BD_Pro_v1.2.zip",
   "whatsapp": "8801327727050"
 }
