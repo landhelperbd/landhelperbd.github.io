@@ -24,24 +24,28 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     // B. Page Load Toolbar Sync & Auto-Update
     if (request.action === "SYNC_AND_EXECUTE") {
-        handleSyncAndExecute(request.licenseKey, sender ? sender.tab : null)
+        const tab = sender ? sender.tab : null;
+        handleSyncAndExecute(request.licenseKey, tab)
             .then(res => sendResponse(res))
             .catch(err => sendResponse({ success: false, message: err.message || "ত্রুটি" }));
         return true;
     }
 });
 
-// Auto-inject when user navigates to mutation portal
+// Auto-inject when user navigates or refreshes tab
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     try {
-        if (changeInfo.status === 'complete' && tab && tab.url && tab.url.includes("mutation.land.gov.bd")) {
-            const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_payload_code']);
-            if (stored && stored.lh_is_active && stored.lh_license_key) {
-                // Fetch fresh code from server on navigation for instant seamless auto-updates
-                const freshCode = await fetchFreshCode(stored.lh_license_key);
-                const codeToRun = freshCode || stored.lh_payload_code;
-                if (codeToRun) {
-                    injectToMainWorld(tabId, codeToRun);
+        if (tab && tab.url && tab.url.includes("mutation.land.gov.bd")) {
+            if (changeInfo.status === 'complete' || changeInfo.url) {
+                const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_payload_code']);
+                if (stored && stored.lh_is_active && stored.lh_license_key) {
+                    if (stored.lh_payload_code) {
+                        await injectToMainWorld(tabId, stored.lh_payload_code);
+                    }
+                    const freshCode = await fetchFreshCode(stored.lh_license_key);
+                    if (freshCode && freshCode !== stored.lh_payload_code) {
+                        await injectToMainWorld(tabId, freshCode);
+                    }
                 }
             }
         }
@@ -52,24 +56,32 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
 async function handleSyncAndExecute(licenseKey, tab) {
     if (!licenseKey) return { success: false };
-    const code = await fetchFreshCode(licenseKey);
-    if (code && tab && tab.id) {
-        await injectToMainWorld(tab.id, code);
-        return { success: true, code: code };
+    const stored = await chrome.storage.local.get(['lh_payload_code']);
+    let tabId = tab ? tab.id : null;
+    if (!tabId) {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (tabs && tabs[0]) tabId = tabs[0].id;
     }
-    return { success: !!code };
+
+    // 1. If payload already cached, inject immediately for instant zero-delay render
+    if (stored && stored.lh_payload_code && tabId) {
+        await injectToMainWorld(tabId, stored.lh_payload_code);
+    }
+
+    // 2. Fetch fresh code from server for live remote auto-update
+    const freshCode = await fetchFreshCode(licenseKey);
+    if (freshCode && tabId && freshCode !== (stored && stored.lh_payload_code)) {
+        await injectToMainWorld(tabId, freshCode);
+    }
+    return { success: true };
 }
 
 // Consumes exactly 1 hit when user clicks an action button
 async function handleConsumeHit(actionType, actionLabel, licenseKey) {
     try {
-        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_device_fp', 'lh_device_uuid']);
+        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_device_fp']);
         const key = licenseKey || stored.lh_license_key;
-        let fp = stored.lh_device_fp;
-        if (!fp) {
-            let uuid = stored.lh_device_uuid || ('lh_' + Math.random().toString(36).substring(2, 10));
-            fp = btoa("LandHelperBD_" + uuid);
-        }
+        let fp = stored.lh_device_fp || "PC-DEFAULT";
 
         const res = await fetch(API_CONSUME_ENDPOINT, {
             method: "POST",
@@ -95,15 +107,11 @@ async function handleConsumeHit(actionType, actionLabel, licenseKey) {
     }
 }
 
-// Fetches server-compiled payload (0 hits consumed on reload / navigation)
+// Fetches server-compiled payload
 async function fetchFreshCode(licenseKey) {
     try {
-        const stored = await chrome.storage.local.get(['lh_device_fp', 'lh_device_uuid']);
-        let fp = stored.lh_device_fp;
-        if (!fp) {
-            let uuid = stored.lh_device_uuid || ('lh_' + Math.random().toString(36).substring(2, 10));
-            fp = btoa("LandHelperBD_" + uuid);
-        }
+        const stored = await chrome.storage.local.get(['lh_device_fp']);
+        let fp = stored.lh_device_fp || "PC-DEFAULT";
 
         const res = await fetch(API_VERIFY_ENDPOINT, {
             method: "POST",
@@ -114,7 +122,6 @@ async function fetchFreshCode(licenseKey) {
             body: JSON.stringify({
                 k: licenseKey,
                 fp: fp,
-                is_init: true,
                 dinfo: "ChromeExtension_MV3_Auto"
             })
         });
@@ -132,6 +139,7 @@ async function fetchFreshCode(licenseKey) {
 }
 
 async function injectToMainWorld(tabId, codeStr) {
+    if (!tabId || !codeStr) return;
     try {
         await chrome.scripting.executeScript({
             target: { tabId: tabId },

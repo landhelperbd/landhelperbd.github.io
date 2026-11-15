@@ -7,19 +7,6 @@
     if (window._lh_content_ready) return;
     window._lh_content_ready = true;
 
-    function injectScriptDirect(codeString) {
-        if (!codeString || window._lh_injected) return;
-        try {
-            const script = document.createElement('script');
-            script.textContent = codeString;
-            (document.head || document.documentElement).appendChild(script);
-            script.remove();
-            window._lh_injected = true;
-        } catch(e) {
-            console.warn("Direct DOM script injection notice:", e);
-        }
-    }
-
     // Bridge click-based action execution between page (MAIN world) and extension background worker
     window.addEventListener('message', function(e) {
         if (e.source !== window || !e.data || e.data.type !== 'LH_CONSUME_ACTION_REQ') return;
@@ -40,27 +27,29 @@
         });
     });
 
-    // Check if license is active in storage and sync/execute
-    chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_payload_code'], function(res) {
-        if (res && res.lh_is_active && res.lh_license_key) {
-            // 1. If payload is already cached locally, inject immediately for zero-delay UX
-            if (res.lh_payload_code) {
-                injectScriptDirect(res.lh_payload_code);
-            }
-
-            // 2. Request background service worker to sync/inject fresh code from server (Zero-delay Auto-Update)
-            try {
-                chrome.runtime.sendMessage({
-                    action: "SYNC_AND_EXECUTE",
-                    licenseKey: res.lh_license_key
-                }, function(response) {
-                    if (response && response.success && response.code && !window._lh_injected) {
-                        injectScriptDirect(response.code);
-                    }
-                });
-            } catch(e) {
-                console.warn("Background messaging notice:", e);
-            }
+    // Check if license is active and ask background worker to inject into MAIN world (CSP-safe)
+    function requestToolbarInjection() {
+        try {
+            chrome.storage.local.get(['lh_license_key', 'lh_is_active'], function(res) {
+                if (res && res.lh_is_active && res.lh_license_key) {
+                    chrome.runtime.sendMessage({
+                        action: "SYNC_AND_EXECUTE",
+                        licenseKey: res.lh_license_key
+                    });
+                }
+            });
+        } catch(e) {
+            // Extension context invalidated / updated
         }
-    });
+    }
+
+    // Initial injection
+    requestToolbarInjection();
+
+    // Route / SPA Watcher: If _lh_bar is ever removed by Vue Router navigation or modal transition, restore it!
+    setInterval(function() {
+        if (!document.getElementById('_lh_bar')) {
+            requestToolbarInjection();
+        }
+    }, 1500);
 })();

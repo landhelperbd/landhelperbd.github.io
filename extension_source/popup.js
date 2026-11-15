@@ -227,18 +227,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     backToRegLink.addEventListener('click', showRegistrationScreen);
 
     openPortalBtn.addEventListener('click', () => {
-        chrome.tabs.create({ url: PORTAL_URL });
+        chrome.tabs.create({ url: "https://mutation.land.gov.bd/mutation-application-request" });
     });
 
     // 4. Initial Check on Popup Open
     try {
-        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_is_pending']);
+        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_is_pending', 'lh_device_fp']);
+        if (!stored.lh_device_fp) {
+            const fp = await getPersistentFingerprint();
+            await chrome.storage.local.set({ 'lh_device_fp': fp });
+        }
         if (stored && stored.lh_license_key) {
             if (stored.lh_is_active) {
                 showActiveScreen(stored.lh_license_key);
+                // Background verify & inject toolbar into active mutation tab immediately
+                checkKeyVerification(stored.lh_license_key, true);
             } else if (stored.lh_is_pending) {
                 showPendingScreen(stored.lh_license_key);
-                // Background check if it has been approved
                 checkKeyVerification(stored.lh_license_key, true);
             } else {
                 inputKey.value = stored.lh_license_key;
