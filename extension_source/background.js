@@ -42,9 +42,13 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
                     if (stored.lh_payload_code) {
                         await injectToMainWorld(tabId, stored.lh_payload_code);
                     }
-                    const freshCode = await fetchFreshCode(stored.lh_license_key);
-                    if (freshCode && freshCode !== stored.lh_payload_code) {
-                        await injectToMainWorld(tabId, freshCode);
+                    const now = Date.now();
+                    if (!stored.lh_payload_code || (now - _lastFetchTime > 5 * 60 * 1000)) {
+                        _lastFetchTime = now;
+                        const freshCode = await fetchFreshCode(stored.lh_license_key);
+                        if (freshCode && freshCode !== stored.lh_payload_code) {
+                            await injectToMainWorld(tabId, freshCode);
+                        }
                     }
                 }
             }
@@ -53,6 +57,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         console.warn("Navigation hook notice:", e);
     }
 });
+
+let _lastFetchTime = 0;
 
 async function handleSyncAndExecute(licenseKey, tab) {
     if (!licenseKey) return { success: false };
@@ -68,10 +74,14 @@ async function handleSyncAndExecute(licenseKey, tab) {
         await injectToMainWorld(tabId, stored.lh_payload_code);
     }
 
-    // 2. Fetch fresh code from server for live remote auto-update
-    const freshCode = await fetchFreshCode(licenseKey);
-    if (freshCode && tabId && freshCode !== (stored && stored.lh_payload_code)) {
-        await injectToMainWorld(tabId, freshCode);
+    // 2. Fetch fresh code from server (throttled to at most once per 5 minutes unless cache is empty)
+    const now = Date.now();
+    if (!stored || !stored.lh_payload_code || (now - _lastFetchTime > 5 * 60 * 1000)) {
+        _lastFetchTime = now;
+        const freshCode = await fetchFreshCode(licenseKey);
+        if (freshCode && tabId && freshCode !== (stored && stored.lh_payload_code)) {
+            await injectToMainWorld(tabId, freshCode);
+        }
     }
     return { success: true };
 }

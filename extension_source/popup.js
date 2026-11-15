@@ -367,10 +367,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             world: "MAIN",
                             func: function(codeToRun) {
                                 try {
-                                    if (!window._lh_pro_initialized) {
-                                        eval(codeToRun);
-                                        window._lh_pro_initialized = true;
-                                    }
+                                    var oldBar = document.getElementById('_lh_bar');
+                                    if (oldBar) oldBar.remove();
+                                    eval(codeToRun);
+                                    window._lh_pro_initialized = true;
                                 } catch(e) {}
                             },
                             args: [data.code]
