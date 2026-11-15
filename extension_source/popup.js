@@ -44,6 +44,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     const backToRegLink = document.getElementById('backToRegLink');
     const statusMsg = document.getElementById('statusMessage');
 
+    // Remote Branding & Config Auto-Sync (Realtime without reinstalling)
+    async function syncRemoteBranding() {
+        try {
+            const res = await fetch("https://landhelperbd.github.io/config.json?_t=" + Date.now(), { cache: "no-store" });
+            if (res.ok) {
+                const cfg = await res.json();
+                if (cfg.app_subtitle) {
+                    const sub = document.querySelector('.subtitle');
+                    if (sub) sub.innerText = cfg.app_subtitle;
+                }
+                if (cfg.tab_register_title && tabRegister) {
+                    tabRegister.innerText = cfg.tab_register_title;
+                }
+                if (cfg.tab_login_title && tabLogin) {
+                    tabLogin.innerText = cfg.tab_login_title;
+                }
+            }
+        } catch(e) {}
+    }
+    syncRemoteBranding();
+
     // Plan Selection Management
     let selectedPlan = '6m';
     const planOptions = [
