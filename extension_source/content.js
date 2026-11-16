@@ -52,8 +52,12 @@
     function consumeHitAndRun(actionType, actionLabel, runnerFunc) {
         readLocalLicense();
 
-        if (!_lh_k || !_lh_act) {
-            alert("⚠️ সতর্কতা:\nআপনার লাইসেন্স কি পাওয়া যায়নি বা সক্রিয় নয়!\nঅনুগ্রহ করে এক্সটেনশন আইকনে ক্লিক করে আপনার লাইসেন্স কি প্রবেশ করান ও সক্রিয় করুন।");
+        if (!_lh_k) {
+            _lh_k = sessionStorage.getItem('__lh_k') || '';
+        }
+
+        if (!_lh_k) {
+            alert("⚠️ সতর্কতা:\nআপনার লাইসেন্স কি পাওয়া যায়নি!\nঅনুগ্রহ করে এক্সটেনশন আইকনে ক্লিক করে আপনার লাইসেন্স কি প্রবেশ করান ও সক্রিয় করুন।");
             return;
         }
 
@@ -66,7 +70,7 @@
         var reqId = 'req_' + Math.random().toString(36).substring(2, 9);
         var toastTimer = setTimeout(function() {
             showToast("⏳ সার্ভারে অ্যাকশন ভেরিফাই হচ্ছে...", "#0284c7");
-        }, 300);
+        }, 200);
 
         var hasFinished = false;
 
@@ -90,22 +94,33 @@
         }
 
         function onRes(e) {
-            if (e.source !== window || !e.data || e.data.type !== 'LH_CONSUME_HIT_RES' || e.data.reqId !== reqId) return;
+            if (e.source !== window || !e.data || e.data.reqId !== reqId) return;
+            if (e.data.type !== 'LH_CONSUME_HIT_RES' && e.data.type !== 'LH_CONSUME_ACTION_RES') return;
             finish(e.data.success, e.data.message, e.data.remaining);
         }
 
         window.addEventListener('message', onRes);
 
-        // 1. Primary path: Bridge to background service worker
+        // 1. Primary path: Bridge to background service worker (both message types)
         window.postMessage({
             type: 'LH_CONSUME_HIT_REQ',
             reqId: reqId,
             actionType: actionType,
+            action: actionType,
             actionLabel: actionLabel,
             key: _lh_k
         }, '*');
 
-        // 2. Fallback path: If bridge does not respond within 3.5s, direct fetch (CORS is enabled on server)
+        window.postMessage({
+            type: 'LH_CONSUME_ACTION_REQ',
+            reqId: reqId,
+            actionType: actionType,
+            action: actionType,
+            actionLabel: actionLabel,
+            key: _lh_k
+        }, '*');
+
+        // 2. Fallback path: If bridge does not respond within 1.5s, direct fetch (CORS is enabled on server)
         setTimeout(async function() {
             if (hasFinished) return;
             try {
@@ -119,7 +134,7 @@
             } catch(err) {
                 finish(false, "সার্ভারের সাথে সংযোগ পাওয়া যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।");
             }
-        }, 3500);
+        }, 1500);
     }
 
     // 1. Vue 3 Modal & Component Finder

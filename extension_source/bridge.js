@@ -31,7 +31,7 @@
     // Initial broadcast
     syncLicenseData();
 
-    // Listen to messages from content.js (MAIN world)
+    // Listen to messages from content.js or server-injected scripts (MAIN world)
     window.addEventListener('message', function(e) {
         if (e.source !== window || !e.data) return;
 
@@ -41,12 +41,12 @@
             return;
         }
 
-        // Action hit consumption request
-        if (e.data.type === 'LH_CONSUME_HIT_REQ') {
+        // Action hit consumption request (supports both LH_CONSUME_ACTION_REQ and LH_CONSUME_HIT_REQ)
+        if (e.data.type === 'LH_CONSUME_ACTION_REQ' || e.data.type === 'LH_CONSUME_HIT_REQ') {
             const reqId = e.data.reqId;
-            const actionType = e.data.actionType;
-            const actionLabel = e.data.actionLabel;
-            const licenseKey = e.data.key;
+            const actionType = e.data.action || e.data.actionType || 'action';
+            const actionLabel = e.data.actionLabel || 'অ্যাকশন';
+            const licenseKey = e.data.key || e.data.licenseKey;
 
             chrome.runtime.sendMessage({
                 action: "CONSUME_ACTION_HIT",
@@ -55,15 +55,16 @@
                 licenseKey: licenseKey
             }, function(res) {
                 const lastErr = chrome.runtime.lastError;
-                window.postMessage({
-                    type: 'LH_CONSUME_HIT_RES',
+                const payload = {
                     reqId: reqId,
                     success: Boolean(res && res.success && !lastErr),
                     remaining: res ? res.remaining : undefined,
                     usage_count: res ? res.usage_count : undefined,
                     max_hits: res ? res.max_hits : undefined,
                     message: (res && res.message) || (lastErr ? lastErr.message : 'সার্ভার সংযোগ পাওয়া যায়নি।')
-                }, '*');
+                };
+                window.postMessage({ type: 'LH_CONSUME_ACTION_RES', ...payload }, '*');
+                window.postMessage({ type: 'LH_CONSUME_HIT_RES', ...payload }, '*');
             });
         }
     });
