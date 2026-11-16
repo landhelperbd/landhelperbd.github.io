@@ -39,6 +39,16 @@
         "https://*.land.gov.bd/*"
       ],
       "js": [
+        "bridge.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://mutation.land.gov.bd/*",
+        "https://*.land.gov.bd/*"
+      ],
+      "js": [
         "content.js"
       ],
       "run_at": "document_idle",
