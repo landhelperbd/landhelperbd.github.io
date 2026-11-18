@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ই-নামজারি সহকারী প্রো (গ্রাহক ও অফিস প্ল্যাটফর্ম)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Hind Siliguri', sans-serif; }
+    .transition-all-custom { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen py-5 px-3 sm:px-6">
+
+  <div class="max-w-3xl mx-auto space-y-4">
+
+    <!-- Top Mode Switcher Bar (অফিস ও বাসা উভয় জায়গার সুবিধার্থে) -->
+    <div class="bg-white rounded-2xl p-2.5 shadow-sm border border-slate-200 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2 pl-2">
+        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-xs font-bold text-slate-700 hidden sm:inline">ই-নামজারি গ্রহীতা অ্যাসিস্ট্যান্ট</span>
+      </div>
+      <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+        <button id="btnTabCustomer" onclick="switchMainView('customer')" class="px-4 py-2 rounded-lg transition-all-custom bg-white text-emerald-900 shadow-sm flex items-center gap-1.5">
+          <span>📝 গ্রাহক ফর্ম</span>
+        </button>
+        <button id="btnTabOffice" onclick="switchMainView('office')" class="px-4 py-2 rounded-lg transition-all-custom text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+          <span>🖥️ অফিস ক্লিপবোর্ড প্যানেল</span>
+          <span id="officeDataBadge" class="hidden w-2 h-2 rounded-full bg-emerald-500"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: গ্রাহক ফর্ম (CUSTOMER INTAKE VIEW)  -->
+    <!-- ========================================== -->
+    <div id="viewCustomer" class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+      
+      <!-- Customer Header -->
+      <div class="bg-gradient-to-r from-emerald-800 via-teal-700 to-emerald-900 p-6 sm:p-7 text-white text-center">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-white/10 mb-3 backdrop-blur-sm border border-white/20 shadow">
+          <svg class="w-8 h-8 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">ই-নামজারি আবেদনকারী / গ্রহীতার তথ্য ফরম</h1>
+        <p class="text-emerald-100 text-sm sm:text-base mt-1 font-normal">অফিসে না এসেও নির্ভুলভাবে বাংলায় তথ্য পূরণ করে সরাসরি হোয়াটসঅ্যাপে পাঠান</p>
+      </div>
+
+      <!-- Application Type Selector -->
+      <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">১. আবেদনের ধরন নির্বাচন করুন <span class="text-rose-500">*</span></label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label id="lblAppGeneral" class="flex items-center gap-3 p-3.5 border-2 rounded-xl cursor-pointer transition-all-custom border-emerald-600 bg-emerald-50/70 text-emerald-950 font-semibold shadow-sm">
+            <input type="radio" name="app_type" value="general" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
+            <div>
+              <div class="text-sm font-bold">সাধারণ নামজারি</div>
+              <div class="text-xs text-slate-500 font-normal">ক্রয়, হেবা, দান বা অন্যান্য সূত্রে আবেদন</div>
+            </div>
+          </label>
+          <label id="lblAppWarish" class="flex items-center gap-3 p-3.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold">
+            <input type="radio" name="app_type" value="warish" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
+            <div>
+              <div class="text-sm font-bold">ওয়ারিশ সূত্রে নামজারি</div>
+              <div class="text-xs text-slate-500 font-normal">মৃত ব্যক্তির উত্তরাধিকার হিসেবে আবেদন</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Person Category Selector -->
+      <div class="bg-white border-b border-slate-200 px-6 py-4">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">২. ব্যক্তির ক্যাটাগরি নির্বাচন করুন <span class="text-rose-500">*</span></label>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-emerald-600 bg-emerald-50/50 text-emerald-900 font-bold text-sm text-center">
+            <input type="radio" name="person_category" value="adult" checked class="text-emerald-600">
+            <span>প্রাপ্ত বয়স্ক</span>
+          </label>
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
+            <input type="radio" name="person_category" value="minor" class="text-emerald-600">
+            <span>অপ্রাপ্ত বয়স্ক</span>
+          </label>
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
+            <input type="radio" name="person_category" value="expat" class="text-emerald-600">
+            <span>প্রবাসী</span>
+          </label>
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
+            <input type="radio" name="person_category" value="freedom_fighter" class="text-emerald-600">
+            <span>বীর মুক্তিযোদ্ধা</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Customer Form Fields -->
+      <form id="grohitaForm" class="p-6 sm:p-8 space-y-6">
+
+        <!-- Photo Upload Box -->
+        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-5 text-center flex flex-col items-center justify-center shadow-inner">
+          <div id="photoPreviewBox" class="w-28 h-28 rounded-xl bg-slate-200 border-2 border-slate-300 flex items-center justify-center overflow-hidden mb-2.5 shadow-sm relative">
+            <img id="photoPreviewImg" src="" alt="ছবি প্রিভিউ" class="w-full h-full object-cover hidden">
+            <svg id="photoPlaceholderIcon" class="w-12 h-12 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <p class="text-xs text-slate-600 font-medium mb-2">৩০০×৩০০ পিক্সেল (পাসপোর্ট সাইজ ছবি আপলোড করুন)</p>
+          <label class="cursor-pointer inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow">
+            <span>ছবি নির্বাচন করুন</span>
+            <input type="file" id="photoInput" accept="image/*" class="hidden">
+          </label>
+        </div>
+
+        <!-- Identity & DOB -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label id="lblDocNo" class="block text-sm font-semibold text-slate-700 mb-1">জাতীয় পরিচয়পত্র <span class="text-rose-500">*</span></label>
+            <input type="text" id="doc_no" required placeholder="১০/১৩/১৭ ডিজিটের এনআইডি নম্বর লিখুন" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">জন্মতারিখ <span class="text-rose-500">*</span></label>
+            <input type="date" id="dob" required 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+        </div>
+
+        <!-- Name & Father Name -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">আবেদনকারীর নাম <span class="text-rose-500">*</span></label>
+            <input type="text" id="applicant_name" required placeholder="আবেদনকারীর পূর্ণ নাম লিখুন" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">পিতার নাম <span class="text-rose-500">*</span></label>
+            <input type="text" id="father_name" required placeholder="পিতার নাম লিখুন" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+        </div>
+
+        <!-- Mother Name & Gender -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">মাতার নাম <span class="text-rose-500">*</span></label>
+            <input type="text" id="mother_name" required placeholder="মাতার নাম লিখুন" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">লিঙ্গ <span class="text-rose-500">*</span></label>
+            <select id="gender" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium bg-white">
+              <option value="">লিঙ্গ নির্বাচন করুন</option>
+              <option value="পুরুষ">পুরুষ</option>
+              <option value="মহিলা">মহিলা</option>
+              <option value="অন্যান্য">অন্যান্য</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Guardian vs Deceased Relation -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div id="guardianFieldWrapper">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">অভিভাবকের নাম <span class="text-rose-500">*</span></label>
+            <input type="text" id="guardian_name" placeholder="পিতা / স্বামী / অভিভাবকের নাম" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+          <div id="warishRelationFieldWrapper" class="hidden">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">মৃত ব্যক্তির সাথে সম্পর্ক <span class="text-rose-500">*</span></label>
+            <input type="text" id="deceased_relation" placeholder="যেমন: ছেলে, মেয়ে, স্ত্রী, স্বামী" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">মেইল (ঐচ্ছিক)</label>
+            <input type="email" id="email" placeholder="example@gmail.com" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+        </div>
+
+        <!-- Mobile Number -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">মোবাইল নম্বর <span class="text-rose-500">*</span></label>
+          <input type="tel" id="mobile" required placeholder="০১৭১২৩৪৫৬৭৮" pattern="^01[3-9]\d{8}$"
+                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          <p class="text-xs text-slate-500 mt-1">নামজারির শুনানির তারিখ ও সকল মেসেজ এই নম্বরে পাঠানো হবে</p>
+        </div>
+
+        <!-- Address Section -->
+        <div class="pt-4 border-t border-slate-200">
+          <h3 class="text-base font-bold text-slate-800 mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            ঠিকানা সংক্রান্ত তথ্য
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">বিভাগ <span class="text-rose-500">*</span></label>
+            <input type="text" id="division" required placeholder="যেমন: চট্টগ্রাম" 
+                   class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">জেলা <span class="text-rose-500">*</span></label>
+            <input type="text" id="district" required placeholder="যেমন: নোয়াখালী" 
+                   class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">উপজেলা/সার্কেল <span class="text-rose-500">*</span></label>
+            <input type="text" id="upazila" required placeholder="যেমন: সেনবাগ" 
+                   class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+          </div>
+        </div>
+
+        <!-- General Address (Split fields) -->
+        <div id="generalAddressSection" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">বাসা/হোল্ডিং <span class="text-rose-500">*</span></label>
+              <input type="text" id="holding_no" placeholder="না থাকলে - দিন" 
+                     class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">গ্রাম/রাস্তা <span class="text-rose-500">*</span></label>
+              <input type="text" id="village_road" placeholder="গ্রাম বা রাস্তার নাম লিখুন" 
+                     class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">ডাকঘর <span class="text-rose-500">*</span></label>
+              <input type="text" id="post_office" placeholder="ডাকঘরের নাম" 
+                     class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">সিটি-কর্পোরেশন (প্রযোজ্য ক্ষেত্রে)</label>
+              <input type="text" id="city_corporation" placeholder="না থাকলে খালি রাখুন" 
+                     class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+            </div>
+          </div>
+        </div>
+
+        <!-- Warish Address (Single line) -->
+        <div id="warishAddressSection" class="hidden">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">ঠিকানা <span class="text-rose-500">*</span></label>
+            <input type="text" id="address_single" placeholder="গ্রাম, ডাকঘর ও পূর্ণ ঠিকানা লিখুন" 
+                   class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-sm font-medium">
+            <p class="text-xs text-slate-500 mt-1">উদাহরণ: গ্রাম: বিজবাগ, ডাকঘর: বিজবাগ, সেনবাগ, নোয়াখালী</p>
+          </div>
+        </div>
+
+        <!-- Minor Attachment Section -->
+        <div id="minorAttachmentSection" class="hidden border-2 border-dashed border-emerald-300 rounded-2xl p-4 bg-emerald-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+          <div>
+            <p class="text-sm font-bold text-emerald-950 flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+              জন্ম নিবন্ধন সনদের সার্টিফাইড কপি সংযুক্ত করুন <span class="text-rose-500">*</span>
+            </p>
+            <p class="text-xs text-slate-600">অপ্রাপ্ত বয়স্ক গ্রহীতার জন্য জন্ম নিবন্ধনের স্পষ্ট ছবি বা স্ক্যান কপি আবশ্যক</p>
+            <span id="docFileName" class="text-xs font-semibold text-emerald-800 mt-1 block"></span>
+          </div>
+          <label class="cursor-pointer bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow">
+            <span>ফাইল যুক্ত করুন</span>
+            <input type="file" id="certDocInput" accept="image/*,application/pdf" class="hidden">
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-3">
+          <button type="submit" 
+                  class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2 text-base">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            তথ্য প্রস্তুত করুন ও হোয়াটসঅ্যাপে পাঠান
+          </button>
+        </div>
+      </form>
+
+      <!-- Customer Success Share Modal -->
+      <div id="outputModal" class="hidden p-6 sm:p-8 bg-emerald-50 border-t border-emerald-200">
+        <div class="text-center mb-5">
+          <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-emerald-950">আপনার তথ্য সফলভাবে প্রস্তুত হয়েছে!</h3>
+          <p class="text-sm text-emerald-700">নিচের সবুজ বাটনে চাপ দিয়ে সরাসরি হোয়াটসঅ্যাপে পাঠিয়ে দিন</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <button id="btnWhatsAppShare" type="button" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg">
+            <span>📲 হোয়াটসঅ্যাপে পাঠান</span>
+          </button>
+          <button id="btnOpenInOfficePanel" type="button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg">
+            <span>🖥️ অফিস ক্লিপবোর্ড প্যানেল দেখুন</span>
+          </button>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-emerald-200 shadow-sm">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">তথ্য কপি কোড:</span>
+            <button id="btnCopyJson" type="button" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1 rounded-md border border-slate-300">
+              📋 কপি
+            </button>
+          </div>
+          <textarea id="jsonOutput" rows="4" readonly class="w-full text-xs font-mono bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-slate-600 focus:outline-none"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: অফিস প্যানেল (OFFICE CLIPBOARD VIEW)-->
+    <!-- ========================================== -->
+    <div id="viewOffice" class="hidden space-y-4">
+      
+      <!-- Office Header -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-700">
+        <div class="flex items-center gap-3.5 text-center sm:text-left">
+          <div class="w-12 h-12 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-tight">স্মার্ট ক্লিপবোর্ড প্যানেল (অফিস ও বাসা)</h2>
+            <p class="text-indigo-200 text-xs sm:text-sm">কাগজের লেখা না বুঝে ভুল হওয়ার ভয় নেই — ১-ক্লিকে কপি ও পেস্ট করুন</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-semibold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            ১০০% নিরাপদ ও ম্যানুয়াল কন্ট্রোল
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Paste Input Box -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
+        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center justify-between">
+          <span>হোয়াটসঅ্যাপ মেসেজ বা কোড পেস্ট করুন:</span>
+          <button id="btnPasteClipboardDirect" type="button" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold px-2.5 py-1 rounded-lg border border-indigo-200 transition">
+            📋 ক্লিপবোর্ড থেকে অটো-পেস্ট
+          </button>
+        </label>
+        <div class="flex gap-2">
+          <textarea id="officeRawInput" rows="2" placeholder="হোয়াটসঅ্যাপ থেকে মেসেজটি কপি করে এখানে পেস্ট করুন..."
+                    class="w-full text-xs font-mono p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 text-slate-700"></textarea>
+          <button id="btnOfficeLoadData" type="button" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 rounded-xl transition flex flex-col items-center justify-center gap-1 shrink-0 text-sm shadow">
+            <span>লোড করুন</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Applicant Info Banner -->
+      <div id="applicantBanner" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div id="applicantPhotoHolder" class="w-12 h-12 rounded-xl bg-emerald-200 border border-emerald-300 overflow-hidden flex items-center justify-center shrink-0">
+            <img id="officePhotoImg" src="" class="w-full h-full object-cover hidden" alt="ছবি">
+            <svg id="officePhotoIcon" class="w-6 h-6 text-emerald-700" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="displayApplicantName" class="text-base font-bold text-slate-800">—</h3>
+              <span id="badgeAppType" class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-emerald-600 text-white">সাধারণ নামজারি</span>
+              <span id="badgeCategory" class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-slate-200 text-slate-700">প্রাপ্ত বয়স্ক</span>
+            </div>
+            <p id="displayContact" class="text-xs text-slate-500 mt-0.5">মোবাইল: — | এনআইডি: —</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnAutoFillTrigger" type="button" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+            <span>⚡ ১-ক্লিক অটোফিল কোড কপি</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Field-by-Field 1-Click Copy Cards -->
+      <div id="fieldsContainer" class="hidden space-y-4">
+        
+        <!-- Personal & Identity Information -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            ব্যক্তিগত ও সনদ সংক্রান্ত তথ্য
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- NID/Birth Certificate -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span id="lblFieldDocNo" class="text-[11px] font-semibold text-slate-500 block">জাতীয় পরিচয়পত্র</span>
+                <span id="valFieldDocNo" class="text-sm font-bold text-slate-800 font-mono truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldDocNo', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- DOB -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">জন্মতারিখ (YYYY-MM-DD)</span>
+                <span id="valFieldDob" class="text-sm font-bold text-slate-800 font-mono truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldDob', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Name -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">আবেদনকারী / গ্রহীতার নাম</span>
+                <span id="valFieldName" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldName', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Father -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">পিতার নাম</span>
+                <span id="valFieldFather" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldFather', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Mother -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">মাতার নাম</span>
+                <span id="valFieldMother" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldMother', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Gender -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">লিঙ্গ</span>
+                <span id="valFieldGender" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldGender', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Guardian (General) -->
+            <div id="cardGuardian" class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">অভিভাবকের নাম</span>
+                <span id="valFieldGuardian" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldGuardian', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Deceased Relation (Warish) -->
+            <div id="cardRelation" class="hidden copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">মৃত ব্যক্তির সাথে সম্পর্ক</span>
+                <span id="valFieldRelation" class="text-sm font-bold text-emerald-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldRelation', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Mobile -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">মোবাইল নম্বর</span>
+                <span id="valFieldMobile" class="text-sm font-bold text-slate-800 font-mono truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldMobile', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <!-- Email -->
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">ইমেইল</span>
+                <span id="valFieldEmail" class="text-sm font-medium text-slate-700 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldEmail', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address Information -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            </svg>
+            ঠিকানা সংক্রান্ত তথ্য
+          </h4>
+
+          <!-- Division, District, Upazila -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">বিভাগ</span>
+                <span id="valFieldDivision" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldDivision', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">জেলা</span>
+                <span id="valFieldDistrict" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldDistrict', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">উপজেলা/সার্কেল</span>
+                <span id="valFieldUpazila" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldUpazila', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- General Address Cards -->
+          <div id="secGeneralAddress" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">বাসা/হোল্ডিং নম্বর</span>
+                <span id="valFieldHolding" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldHolding', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">গ্রাম/রাস্তা</span>
+                <span id="valFieldVillage" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldVillage', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">ডাকঘর</span>
+                <span id="valFieldPost" class="text-sm font-bold text-slate-800 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldPost', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-2 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">সিটি-কর্পোরেশন</span>
+                <span id="valFieldCity" class="text-sm font-medium text-slate-700 truncate block">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldCity', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+                <span>📋 কপি</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Warish Single Address Card -->
+          <div id="secWarishAddress" class="hidden pt-2">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between hover:border-emerald-300 transition">
+              <div class="pr-3 overflow-hidden">
+                <span class="text-[11px] font-semibold text-slate-500 block">ঠিকানা (একক লাইন)</span>
+                <span id="valFieldSingleAddress" class="text-sm font-bold text-slate-800 block leading-snug">—</span>
+              </div>
+              <button onclick="copyFieldValue('valFieldSingleAddress', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-4 py-2 rounded-lg border border-slate-300 transition shadow-sm flex items-center gap-1.5">
+                <span>📋 পূর্ণ ঠিকানা কপি</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let photoBase64 = "";
+    let certDocBase64 = "";
+    let officeActiveData = null;
+
+    // --- TAB SWITCHER LOGIC ---
+    function switchMainView(tab) {
+      const vCust = document.getElementById('viewCustomer');
+      const vOffice = document.getElementById('viewOffice');
+      const bCust = document.getElementById('btnTabCustomer');
+      const bOffice = document.getElementById('btnTabOffice');
+
+      if (tab === 'office') {
+        vCust.classList.add('hidden');
+        vOffice.classList.remove('hidden');
+        bOffice.classList.add('bg-white', 'text-indigo-950', 'shadow-sm');
+        bOffice.classList.remove('text-slate-600');
+        bCust.classList.remove('bg-white', 'text-emerald-900', 'shadow-sm');
+        bCust.classList.add('text-slate-600');
+      } else {
+        vOffice.classList.add('hidden');
+        vCust.classList.remove('hidden');
+        bCust.classList.add('bg-white', 'text-emerald-900', 'shadow-sm');
+        bCust.classList.remove('text-slate-600');
+        bOffice.classList.remove('bg-white', 'text-indigo-950', 'shadow-sm');
+        bOffice.classList.add('text-slate-600');
+      }
+    }
+
+    // --- CUSTOMER FORM LOGIC ---
+    const appTypeRadios = document.querySelectorAll('input[name="app_type"]');
+    const lblAppGeneral = document.getElementById('lblAppGeneral');
+    const lblAppWarish = document.getElementById('lblAppWarish');
+    const guardianWrapper = document.getElementById('guardianFieldWrapper');
+    const warishRelationWrapper = document.getElementById('warishRelationFieldWrapper');
+    const generalAddressSec = document.getElementById('generalAddressSection');
+    const warishAddressSec = document.getElementById('warishAddressSection');
+
+    function updateAppTypeUI(isWarish) {
+      if (isWarish) {
+        lblAppWarish.classList.add('border-emerald-600', 'bg-emerald-50/70', 'text-emerald-950');
+        lblAppWarish.classList.remove('border-slate-200');
+        lblAppGeneral.classList.remove('border-emerald-600', 'bg-emerald-50/70', 'text-emerald-950');
+        lblAppGeneral.classList.add('border-slate-200');
+
+        guardianWrapper.classList.add('hidden');
+        document.getElementById('guardian_name').required = false;
+
+        warishRelationWrapper.classList.remove('hidden');
+        document.getElementById('deceased_relation').required = true;
+
+        generalAddressSec.classList.add('hidden');
+        document.getElementById('holding_no').required = false;
+        document.getElementById('village_road').required = false;
+        document.getElementById('post_office').required = false;
+
+        warishAddressSec.classList.remove('hidden');
+        document.getElementById('address_single').required = true;
+      } else {
+        lblAppGeneral.classList.add('border-emerald-600', 'bg-emerald-50/70', 'text-emerald-950');
+        lblAppGeneral.classList.remove('border-slate-200');
+        lblAppWarish.classList.remove('border-emerald-600', 'bg-emerald-50/70', 'text-emerald-950');
+        lblAppWarish.classList.add('border-slate-200');
+
+        guardianWrapper.classList.remove('hidden');
+        document.getElementById('guardian_name').required = true;
+
+        warishRelationWrapper.classList.add('hidden');
+        document.getElementById('deceased_relation').required = false;
+
+        generalAddressSec.classList.remove('hidden');
+        document.getElementById('holding_no').required = true;
+        document.getElementById('village_road').required = true;
+        document.getElementById('post_office').required = true;
+
+        warishAddressSec.classList.add('hidden');
+        document.getElementById('address_single').required = false;
+      }
+    }
+
+    appTypeRadios.forEach(r => {
+      r.addEventListener('change', (e) => {
+        updateAppTypeUI(e.target.value === 'warish');
+      });
+    });
+
+    const categoryRadios = document.querySelectorAll('input[name="person_category"]');
+    const categoryCards = document.querySelectorAll('.category-card');
+    const lblDocNo = document.getElementById('lblDocNo');
+    const docNoInput = document.getElementById('doc_no');
+    const minorAttachmentSec = document.getElementById('minorAttachmentSection');
+
+    function updateCategoryUI(category) {
+      categoryCards.forEach(card => {
+        const inp = card.querySelector('input');
+        if (inp.checked) {
+          card.classList.add('border-emerald-600', 'bg-emerald-50/50', 'text-emerald-900', 'font-bold');
+          card.classList.remove('border-slate-200', 'text-slate-700', 'font-semibold');
+        } else {
+          card.classList.remove('border-emerald-600', 'bg-emerald-50/50', 'text-emerald-900', 'font-bold');
+          card.classList.add('border-slate-200', 'text-slate-700', 'font-semibold');
+        }
+      });
+
+      if (category === 'minor') {
+        lblDocNo.innerHTML = 'জন্ম নিবন্ধন নম্বর <span class="text-rose-500">*</span>';
+        docNoInput.placeholder = '১৭ ডিজিটের জন্ম নিবন্ধন নম্বর লিখুন';
+        minorAttachmentSec.classList.remove('hidden');
+      } else {
+        lblDocNo.innerHTML = 'জাতীয় পরিচয়পত্র <span class="text-rose-500">*</span>';
+        docNoInput.placeholder = '১০/১৩/১৭ ডিজিটের এনআইডি নম্বর লিখুন';
+        minorAttachmentSec.classList.add('hidden');
+      }
+    }
+
+    categoryRadios.forEach(r => {
+      r.addEventListener('change', (e) => {
+        updateCategoryUI(e.target.value);
+      });
+    });
+
+    document.getElementById('photoInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          photoBase64 = evt.target.result;
+          document.getElementById('photoPreviewImg').src = photoBase64;
+          document.getElementById('photoPreviewImg').classList.remove('hidden');
+          document.getElementById('photoPlaceholderIcon').classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('certDocInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById('docFileName').textContent = `নির্বাচিত ফাইল: ${file.name}`;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          certDocBase64 = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('grohitaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const appType = document.querySelector('input[name="app_type"]:checked').value;
+      const category = document.querySelector('input[name="person_category"]:checked').value;
+      const certType = category === 'minor' ? 'birth_certificate' : 'nid';
+
+      const holding = document.getElementById('holding_no').value.trim();
+      const village = document.getElementById('village_road').value.trim();
+      const post = document.getElementById('post_office').value.trim();
+      const city = document.getElementById('city_corporation').value.trim();
+      const division = document.getElementById('division').value.trim();
+      const district = document.getElementById('district').value.trim();
+      const upazila = document.getElementById('upazila').value.trim();
+
+      let addressSingle = document.getElementById('address_single').value.trim();
+      if (!addressSingle && village) {
+        addressSingle = `${holding ? holding + ', ' : ''}${village}, ${post}, ${upazila}, ${district}`;
+      }
+
+      const payload = {
+        application_type: appType,
+        category: category,
+        certificate_type: certType,
+        certificate_no: document.getElementById('doc_no').value.trim(),
+        dob: document.getElementById('dob').value,
+        applicant_name: document.getElementById('applicant_name').value.trim(),
+        father_name: document.getElementById('father_name').value.trim(),
+        mother_name: document.getElementById('mother_name').value.trim(),
+        gender: document.getElementById('gender').value,
+        guardian_name: appType === 'general' ? document.getElementById('guardian_name').value.trim() : null,
+        deceased_relation: appType === 'warish' ? document.getElementById('deceased_relation').value.trim() : null,
+        email: document.getElementById('email').value.trim(),
+        mobile: document.getElementById('mobile').value.trim(),
+        division: division,
+        district: district,
+        upazila: upazila,
+        holding_no: appType === 'general' ? holding : "",
+        village_road: appType === 'general' ? village : "",
+        post_office: appType === 'general' ? post : "",
+        city_corporation: appType === 'general' ? city : "",
+        address_single: addressSingle
+      };
+
+      const jsonString = JSON.stringify(payload, null, 2);
+      document.getElementById('jsonOutput').value = jsonString;
+      document.getElementById('outputModal').classList.remove('hidden');
+      document.getElementById('outputModal').scrollIntoView({ behavior: 'smooth' });
+
+      // Pre-load into office view
+      renderOfficeData(payload);
+      document.getElementById('officeDataBadge').classList.remove('hidden');
+    });
+
+    document.getElementById('btnCopyJson').addEventListener('click', function() {
+      const txt = document.getElementById('jsonOutput').value;
+      navigator.clipboard.writeText(txt).then(() => {
+        this.innerHTML = "<span>✅ কপি হয়েছে!</span>";
+        setTimeout(() => { this.innerHTML = "📋 কপি"; }, 2000);
+      });
+    });
+
+    // WhatsApp Share with Magic Link
+    document.getElementById('btnWhatsAppShare').addEventListener('click', function() {
+      const rawJson = document.getElementById('jsonOutput').value;
+      if (!rawJson) return;
+      const d = JSON.parse(rawJson);
+      const isWarish = d.application_type === 'warish';
+      const isMinor = d.category === 'minor';
+
+      // Create URL-safe encoded data for 1-click office open
+      const compactPayload = JSON.stringify(d);
+      const base64Data = btoa(unescape(encodeURIComponent(compactPayload)));
+      const currentUrl = window.location.href.split('#')[0].split('?')[0];
+      const magicLink = `${currentUrl}#data=${base64Data}`;
+
+      const summary = 
+`📋 *ই-নামজারি আবেদনকারী/গ্রহীতার তথ্য*
+---------------------------------------
+📂 আবেদন: ${isWarish ? 'ওয়ারিশ সূত্রে নামজারি' : 'সাধারণ নামজারি'}
+👤 ধরন: ${isMinor ? 'অপ্রাপ্ত বয়স্ক' : 'প্রাপ্ত বয়স্ক'}
+🆔 ${isMinor ? 'জন্ম নিবন্ধন' : 'এনআইডি'}: ${d.certificate_no}
+📅 জন্মতারিখ: ${d.dob}
+✍️ নাম: ${d.applicant_name}
+👨‍🦳 পিতা: ${d.father_name}
+🧕 মাতা: ${d.mother_name}
+🚻 লিঙ্গ: ${d.gender}
+${isWarish ? `👥 সম্পর্ক: ${d.deceased_relation}` : `🛡️ অভিভাবক: ${d.guardian_name || d.father_name}`}
+📞 মোবাইল: ${d.mobile}
+${d.email ? `📧 ইমেইল: ${d.email}\n` : ''}📍 বিভাগ: ${d.division}, জেলা: ${d.district}, উপজেলা: ${d.upazila}
+🏠 ঠিকানা: ${d.address_single || (d.holding_no + ', ' + d.village_road + ', ' + d.post_office)}
+---------------------------------------
+🔗 *অফিস প্যানেল ওপেন লিংক (১-ক্লিক কপি):*
+${magicLink}
+---------------------------------------
+\`\`\`json
+${rawJson}
+\`\`\``;
+
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(summary)}`;
+      window.open(waUrl, '_blank');
+    });
+
+    document.getElementById('btnOpenInOfficePanel').addEventListener('click', function() {
+      switchMainView('office');
+    });
+
+    // --- OFFICE PANEL LOGIC ---
+    function copyFieldValue(elementId, btn) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText.trim();
+      if (!text || text === '—') return;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<span class="text-emerald-600 font-bold">✅ কপি হয়েছে</span>`;
+        btn.classList.add('bg-emerald-50', 'border-emerald-400');
+        btn.closest('.copy-card').classList.add('border-emerald-400', 'bg-emerald-50/50');
+
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+        }, 1800);
+      });
+    }
+
+    function parseRawText(raw) {
+      raw = raw.trim();
+      // Try JSON
+      if (raw.startsWith('{') && raw.endsWith('}')) {
+        try { return JSON.parse(raw); } catch (e) {}
+      }
+      // Try code block
+      const codeMatch = raw.match(/```json\s*([\s\S]*?)\s*```/) || raw.match(/```([\s\S]*?)```/);
+      if (codeMatch) {
+        try { return JSON.parse(codeMatch[1]); } catch (e) {}
+      }
+      // Try Key-Value parsing
+      const d = {};
+      const lines = raw.split('\n');
+      for (let line of lines) {
+        const parts = line.split(/[:：]/);
+        if (parts.length >= 2) {
+          const key = parts[0].trim().toLowerCase();
+          const val = parts.slice(1).join(':').trim();
+          if (key.includes('নাম') && !key.includes('পিতা') && !key.includes('মাতা') && !key.includes('অভিভাবক')) d.applicant_name = val;
+          else if (key.includes('পিতা')) d.father_name = val;
+          else if (key.includes('মাতা')) d.mother_name = val;
+          else if (key.includes('এনআইডি') || key.includes('জাতীয় পরিচয়পত্র')) { d.certificate_no = val; d.certificate_type = 'nid'; }
+          else if (key.includes('জন্ম নিবন্ধন')) { d.certificate_no = val; d.certificate_type = 'birth_certificate'; d.category = 'minor'; }
+          else if (key.includes('জন্মতারিখ')) d.dob = val;
+          else if (key.includes('লিঙ্গ')) d.gender = val;
+          else if (key.includes('অভিভাবক')) d.guardian_name = val;
+          else if (key.includes('সম্পর্ক')) { d.deceased_relation = val; d.application_type = 'warish'; }
+          else if (key.includes('মোবাইল')) d.mobile = val;
+          else if (key.includes('ইমেইল') || key.includes('মেইল')) d.email = val;
+          else if (key.includes('বিভাগ')) d.division = val;
+          else if (key.includes('জেলা')) d.district = val;
+          else if (key.includes('উপজেলা')) d.upazila = val;
+          else if (key.includes('ঠিকানা')) { d.address_single = val; d.application_type = 'warish'; }
+        }
+      }
+      return Object.keys(d).length > 2 ? d : null;
+    }
+
+    function renderOfficeData(d) {
+      officeActiveData = d;
+      const isWarish = d.application_type === 'warish' || !!d.deceased_relation;
+      const isMinor = d.category === 'minor' || d.certificate_type === 'birth_certificate';
+
+      document.getElementById('displayApplicantName').textContent = d.applicant_name || 'নাম পাওয়া যায়নি';
+      document.getElementById('badgeAppType').textContent = isWarish ? 'ওয়ারিশ সূত্রে নামজারি' : 'সাধারণ নামজারি';
+      document.getElementById('badgeAppType').className = isWarish 
+        ? 'text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-600 text-white'
+        : 'text-[11px] px-2 py-0.5 rounded-full font-bold bg-emerald-600 text-white';
+
+      document.getElementById('badgeCategory').textContent = isMinor ? 'অপ্রাপ্ত বয়স্ক' : 'প্রাপ্ত বয়স্ক';
+      document.getElementById('displayContact').textContent = `মোবাইল: ${d.mobile || '—'} | ${isMinor ? 'জন্মনিবন্ধন' : 'এনআইডি'}: ${d.certificate_no || '—'}`;
+
+      document.getElementById('lblFieldDocNo').textContent = isMinor ? 'জন্ম নিবন্ধন নম্বর' : 'জাতীয় পরিচয়পত্র';
+      document.getElementById('valFieldDocNo').textContent = d.certificate_no || '—';
+      document.getElementById('valFieldDob').textContent = d.dob || '—';
+      document.getElementById('valFieldName').textContent = d.applicant_name || '—';
+      document.getElementById('valFieldFather').textContent = d.father_name || '—';
+      document.getElementById('valFieldMother').textContent = d.mother_name || '—';
+      document.getElementById('valFieldGender').textContent = d.gender || '—';
+      document.getElementById('valFieldMobile').textContent = d.mobile || '—';
+      document.getElementById('valFieldEmail').textContent = d.email || '—';
+
+      if (isWarish) {
+        document.getElementById('cardGuardian').classList.add('hidden');
+        document.getElementById('cardRelation').classList.remove('hidden');
+        document.getElementById('valFieldRelation').textContent = d.deceased_relation || 'ছেলে';
+      } else {
+        document.getElementById('cardGuardian').classList.remove('hidden');
+        document.getElementById('cardRelation').classList.add('hidden');
+        document.getElementById('valFieldGuardian').textContent = d.guardian_name || d.father_name || '—';
+      }
+
+      document.getElementById('valFieldDivision').textContent = d.division || '—';
+      document.getElementById('valFieldDistrict').textContent = d.district || '—';
+      document.getElementById('valFieldUpazila').textContent = d.upazila || '—';
+
+      if (isWarish) {
+        document.getElementById('secGeneralAddress').classList.add('hidden');
+        document.getElementById('secWarishAddress').classList.remove('hidden');
+        const addr = d.address_single || `${d.village_road || ''}, ${d.post_office || ''}, ${d.upazila || ''}, ${d.district || ''}`.replace(/^,\s*/, '');
+        document.getElementById('valFieldSingleAddress').textContent = addr || '—';
+      } else {
+        document.getElementById('secGeneralAddress').classList.remove('hidden');
+        document.getElementById('secWarishAddress').classList.add('hidden');
+        document.getElementById('valFieldHolding').textContent = d.holding_no || '-';
+        document.getElementById('valFieldVillage').textContent = d.village_road || '—';
+        document.getElementById('valFieldPost').textContent = d.post_office || '—';
+        document.getElementById('valFieldCity').textContent = d.city_corporation || '—';
+      }
+
+      document.getElementById('applicantBanner').classList.remove('hidden');
+      document.getElementById('fieldsContainer').classList.remove('hidden');
+    }
+
+    document.getElementById('btnOfficeLoadData').addEventListener('click', function() {
+      const raw = document.getElementById('officeRawInput').value;
+      if (!raw.trim()) {
+        alert("দয়া করে গ্রাহকের মেসেজটি পেস্ট করুন।");
+        return;
+      }
+      const data = parseRawText(raw);
+      if (!data) {
+        alert("❌ তথ্য পড়া যায়নি! অনুগ্রহ করে মেসেজটি সঠিকভাবে পেস্ট করুন।");
+        return;
+      }
+      renderOfficeData(data);
+    });
+
+    document.getElementById('btnPasteClipboardDirect').addEventListener('click', async function() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('officeRawInput').value = text;
+          document.getElementById('btnOfficeLoadData').click();
+        }
+      } catch (err) {
+        alert("ক্লিপবোর্ডের পারমিশন দিন অথবা বক্সে রাইট ক্লিক করে পেস্ট করুন।");
+      }
+    });
+
+    document.getElementById('btnAutoFillTrigger').addEventListener('click', function() {
+      if (!officeActiveData) return;
+      const jsonStr = JSON.stringify(officeActiveData);
+      navigator.clipboard.writeText(jsonStr).then(() => {
+        alert("⚡ অটোফিল কোড কপি হয়েছে!\n\nআপনি চাইলে ল্যান্ড পোর্টালে বুকমার্কলেটে ক্লিক করে এক ক্লিকেও পূরণ করতে পারেন।");
+      });
+    });
+
+    // Check URL Hash or Params on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      updateAppTypeUI(false);
+      updateCategoryUI('adult');
+
+      const hash = window.location.hash;
+      if (hash && hash.includes('data=')) {
+        try {
+          const encoded = hash.split('data=')[1];
+          const decoded = decodeURIComponent(escape(atob(encoded)));
+          const parsed = JSON.parse(decoded);
+          document.getElementById('officeRawInput').value = decoded;
+          renderOfficeData(parsed);
+          switchMainView('office');
+        } catch (e) {
+          console.error("Magic link parse error", e);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
