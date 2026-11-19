@@ -324,13 +324,13 @@
 
         var bar = document.createElement('div');
         bar.id = '_lh_bar';
-        bar.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:2147483647;display:flex;align-items:center;gap:5px;background:#090d16;padding:4px 8px;border-radius:25px;box-shadow:0 8px 25px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.2);font-family:sans-serif;';
+        bar.style.cssText = 'position:fixed;bottom:18px;right:18px;z-index:2147483647;display:flex;align-items:center;gap:4px;background:#090d16;padding:3px 6px;border-radius:20px;box-shadow:0 8px 25px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.2);font-family:sans-serif;';
         bar.innerHTML = '<span style="font-size:11px;font-weight:700;color:#10b981;padding-left:3px;margin-right:2px;">🛡️ Land Helper:</span>' +
-            '<span id="_lh_hit_badge" style="display:none;font-size:10px;font-weight:700;color:#fde047;background:rgba(234,179,8,0.2);padding:2px 6px;border-radius:10px;border:1px solid rgba(234,179,8,0.4);"></span>' +
-            '<button type="button" onclick="window._slRst()" style="background:#ea580c;color:#fff;border:none;padding:5px 11px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;box-shadow:0 3px 8px rgba(234,88,12,0.3);display:flex;align-items:center;gap:3px;" title="প্রোফাইল রিসেট">🔄 রিসেট</button>' +
-            '<button type="button" onclick="window._sl18()" style="background:#059669;color:#fff;border:none;padding:5px 11px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;box-shadow:0 3px 8px rgba(5,150,105,0.3);display:flex;align-items:center;gap:3px;" title="১৮+ মোড">🔞 ১৮+</button>' +
-            '<button type="button" onclick="window._slRep()" style="background:#2563eb;color:#fff;border:none;padding:5px 11px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;box-shadow:0 3px 8px rgba(37,99,235,0.3);display:flex;align-items:center;gap:3px;" title="অফলাইন আবেদন">👥 অফলাইন</button>' +
-            '<button type="button" onclick="var b=document.getElementById(\'_lh_bar\');if(b)b.remove();" style="background:transparent;border:none;color:#94a3b8;font-size:13px;cursor:pointer;padding:0 3px;" title="বন্ধ করুন">✕</button>';
+            '<span id="_lh_hit_badge" style="display:none;font-size:10px;font-weight:700;color:#fde047;background:rgba(234,179,8,0.2);padding:2px 5px;border-radius:8px;border:1px solid rgba(234,179,8,0.4);"></span>' +
+            '<button type="button" onclick="window._slRst()" style="background:#ea580c;color:#fff;border:none;padding:4px 9px;font-size:11px;font-weight:700;border-radius:18px;cursor:pointer;box-shadow:0 2px 6px rgba(234,88,12,0.3);display:flex;align-items:center;gap:3px;" title="প্রোফাইল রিসেট">🔄 রিসেট</button>' +
+            '<button type="button" onclick="window._sl18()" style="background:#059669;color:#fff;border:none;padding:4px 9px;font-size:11px;font-weight:700;border-radius:18px;cursor:pointer;box-shadow:0 2px 6px rgba(5,150,105,0.3);display:flex;align-items:center;gap:3px;" title="১৮+ মোড">🔞 ১৮+</button>' +
+            '<button type="button" onclick="window._slRep()" style="background:#2563eb;color:#fff;border:none;padding:4px 9px;font-size:11px;font-weight:700;border-radius:18px;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,0.3);display:flex;align-items:center;gap:3px;" title="অফলাইন আবেদন">👥 অফলাইন</button>' +
+            '<button type="button" onclick="var b=document.getElementById(\'_lh_bar\');if(b)b.remove();" style="background:transparent;border:none;color:#94a3b8;font-size:14px;cursor:pointer;padding:0 3px;" title="বন্ধ করুন">✕</button>';
 
         (document.documentElement || document.body).appendChild(bar);
         updateHitBadgeUI();
