@@ -22,8 +22,9 @@
     "bgColor": "#0f172a"
   },
   "buttons": {
-    "reset_label": "🔄 রিসেট বাটন",
-    "age_label": "🔞 ১৮+ মোড"
+    "reset_label": "🔄 রিসেট",
+    "age_label": "🔞 ১৮+",
+    "rep_label": "👥 অফলাইন"
   },
   "update_url": "https://landhelperbd.github.io/downloads/Land_Helper_BD_Pro_v1.2.zip",
   "whatsapp": "8801327727050"

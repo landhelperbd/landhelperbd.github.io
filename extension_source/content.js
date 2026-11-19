@@ -281,7 +281,32 @@
         });
     };
 
-    // 5. Toast Notification
+    
+    // 5. Action 3: 👥 অফলাইন আবেদন (Offline / Representative Mode - Metered)
+    window._slRep = window._lhDoRep = function() {
+        consumeHitAndRun('rep_apply', 'অফলাইন আবেদন', function(remainingHits) {
+            var modal = findModalComponent();
+            if (modal && modal.recipientInformation) {
+                try {
+                    modal.recipientInformation.isRepresentative = true;
+                    modal.recipientInformation.applicantType = 'representative';
+                } catch(e) {}
+            }
+            var radios = Array.from(document.querySelectorAll('input[type="radio"], label, span, button'));
+            var repEl = radios.find(function(el) {
+                var t = (el.innerText || el.textContent || el.value || '').trim();
+                return t.indexOf('প্রতিনিধির মাধ্যমে') !== -1 || t.indexOf('আবেদনকারীর প্রতিনিধি') !== -1 || (t.indexOf('প্রতিনিধি') !== -1 && t.indexOf('Land Helper') === -1);
+            });
+            if (repEl) {
+                try { repEl.click(); } catch(e){}
+            }
+            var remMsg = (remainingHits !== undefined && remainingHits !== 'unlimited') ? " (অবশিষ্ট হিট: " + remainingHits + "টি)" : "";
+            showToast("👥 অফলাইন মোড সক্রিয় করা হয়েছে!" + remMsg, "#2563eb");
+            alert("👥 অফলাইন মোড সক্রিয় করা হয়েছে!" + remMsg);
+        });
+    };
+
+// 5. Toast Notification
     function showToast(msg, bg) {
         var old = document.getElementById('_lh_toast');
         if (old) old.remove();
@@ -299,12 +324,13 @@
 
         var bar = document.createElement('div');
         bar.id = '_lh_bar';
-        bar.style.cssText = 'position:fixed;bottom:25px;right:25px;z-index:2147483647;display:flex;align-items:center;gap:10px;background:#090d16;padding:8px 14px;border-radius:35px;box-shadow:0 10px 30px rgba(0,0,0,0.45);border:1.5px solid rgba(255,255,255,0.18);font-family:sans-serif;';
-        bar.innerHTML = '<span style="font-size:13px;font-weight:700;color:#10b981;padding-left:4px;">🛡️ Land Helper:</span>' +
-            '<span id="_lh_hit_badge" style="display:none;font-size:11px;font-weight:700;color:#fde047;background:rgba(234,179,8,0.2);padding:3px 8px;border-radius:12px;border:1px solid rgba(234,179,8,0.4);"></span>' +
-            '<button type="button" onclick="window._slRst()" style="background:#ea580c;color:#fff;border:none;padding:9px 16px;font-size:13px;font-weight:700;border-radius:25px;cursor:pointer;box-shadow:0 4px 12px rgba(234,88,12,0.35);display:flex;align-items:center;gap:5px;">🔄 রিসেট বাটন</button>' +
-            '<button type="button" onclick="window._sl18()" style="background:#059669;color:#fff;border:none;padding:9px 16px;font-size:13px;font-weight:700;border-radius:25px;cursor:pointer;box-shadow:0 4px 12px rgba(5,150,105,0.35);display:flex;align-items:center;gap:5px;">🔞 ১৮+ মোড</button>' +
-            '<button type="button" onclick="var b=document.getElementById(\'_lh_bar\');if(b)b.remove();" style="background:transparent;border:none;color:#94a3b8;font-size:16px;cursor:pointer;padding:0 5px;" title="বন্ধ করুন">✕</button>';
+        bar.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:2147483647;display:flex;align-items:center;gap:5px;background:#090d16;padding:4px 8px;border-radius:25px;box-shadow:0 8px 25px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.2);font-family:sans-serif;';
+        bar.innerHTML = '<span style="font-size:11px;font-weight:700;color:#10b981;padding-left:3px;margin-right:2px;">🛡️ Land Helper:</span>' +
+            '<span id="_lh_hit_badge" style="display:none;font-size:10px;font-weight:700;color:#fde047;background:rgba(234,179,8,0.2);padding:2px 6px;border-radius:10px;border:1px solid rgba(234,179,8,0.4);"></span>' +
+            '<button type="button" onclick="window._slRst()" style="background:#ea580c;color:#fff;border:none;padding:5px 11px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;box-shadow:0 3px 8px rgba(234,88,12,0.3);display:flex;align-items:center;gap:3px;" title="প্রোফাইল রিসেট">🔄 রিসেট</button>' +
+            '<button type="button" onclick="window._sl18()" style="background:#059669;color:#fff;border:none;padding:5px 11px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;box-shadow:0 3px 8px rgba(5,150,105,0.3);display:flex;align-items:center;gap:3px;" title="১৮+ মোড">🔞 ১৮+</button>' +
+            '<button type="button" onclick="window._slRep()" style="background:#2563eb;color:#fff;border:none;padding:5px 11px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;box-shadow:0 3px 8px rgba(37,99,235,0.3);display:flex;align-items:center;gap:3px;" title="অফলাইন আবেদন">👥 অফলাইন</button>' +
+            '<button type="button" onclick="var b=document.getElementById(\'_lh_bar\');if(b)b.remove();" style="background:transparent;border:none;color:#94a3b8;font-size:13px;cursor:pointer;padding:0 3px;" title="বন্ধ করুন">✕</button>';
 
         (document.documentElement || document.body).appendChild(bar);
         updateHitBadgeUI();
