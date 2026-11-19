@@ -10,24 +10,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Hind Siliguri', sans-serif; }
-    .transition-all-custom { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .transition-custom { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-copied { border-color: #10b981 !important; background-color: #f0fdf4 !important; }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen py-5 px-3 sm:px-6">
 
   <div class="max-w-3xl mx-auto space-y-4">
 
-    <!-- Top Mode Switcher Bar (অফিস ও বাসা উভয় জায়গার সুবিধার্থে) -->
+    <!-- Top Mode Switcher Bar -->
     <div class="bg-white rounded-2xl p-2.5 shadow-sm border border-slate-200 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2 pl-2">
         <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span class="text-xs font-bold text-slate-700 hidden sm:inline">ই-নামজারি গ্রহীতা অ্যাসিস্ট্যান্ট</span>
+        <span class="text-xs font-bold text-slate-700 hidden sm:inline">ই-নামজারি স্মার্ট অ্যাসিস্ট্যান্ট</span>
       </div>
       <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
-        <button id="btnTabCustomer" onclick="switchMainView('customer')" class="px-4 py-2 rounded-lg transition-all-custom bg-white text-emerald-900 shadow-sm flex items-center gap-1.5">
+        <button id="btnTabCustomer" onclick="switchMainView('customer')" class="px-4 py-2 rounded-lg transition-custom bg-white text-emerald-900 shadow-sm flex items-center gap-1.5">
           <span>📝 গ্রাহক ফর্ম</span>
         </button>
-        <button id="btnTabOffice" onclick="switchMainView('office')" class="px-4 py-2 rounded-lg transition-all-custom text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+        <button id="btnTabOffice" onclick="switchMainView('office')" class="px-4 py-2 rounded-lg transition-custom text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
           <span>🖥️ অফিস ক্লিপবোর্ড প্যানেল</span>
           <span id="officeDataBadge" class="hidden w-2 h-2 rounded-full bg-emerald-500"></span>
         </button>
@@ -47,21 +48,21 @@
           </svg>
         </div>
         <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">ই-নামজারি আবেদনকারী / গ্রহীতার তথ্য ফরম</h1>
-        <p class="text-emerald-100 text-sm sm:text-base mt-1 font-normal">অফিসে না এসেও নির্ভুলভাবে বাংলায় তথ্য পূরণ করে সরাসরি হোয়াটসঅ্যাপে পাঠান</p>
+        <p class="text-emerald-100 text-sm sm:text-base mt-1 font-normal">সহজে ও নির্ভুলভাবে বাংলায় তথ্য পূরণ করে সরাসরি হোয়াটসঅ্যাপে পাঠান</p>
       </div>
 
       <!-- Application Type Selector -->
       <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">১. আবেদনের ধরন নির্বাচন করুন <span class="text-rose-500">*</span></label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <label id="lblAppGeneral" class="flex items-center gap-3 p-3.5 border-2 rounded-xl cursor-pointer transition-all-custom border-emerald-600 bg-emerald-50/70 text-emerald-950 font-semibold shadow-sm">
+          <label id="lblAppGeneral" class="flex items-center gap-3 p-3.5 border-2 rounded-xl cursor-pointer transition-custom border-emerald-600 bg-emerald-50/70 text-emerald-950 font-semibold shadow-sm">
             <input type="radio" name="app_type" value="general" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
             <div>
               <div class="text-sm font-bold">সাধারণ নামজারি</div>
               <div class="text-xs text-slate-500 font-normal">ক্রয়, হেবা, দান বা অন্যান্য সূত্রে আবেদন</div>
             </div>
           </label>
-          <label id="lblAppWarish" class="flex items-center gap-3 p-3.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold">
+          <label id="lblAppWarish" class="flex items-center gap-3 p-3.5 border-2 rounded-xl cursor-pointer transition-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold">
             <input type="radio" name="app_type" value="warish" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
             <div>
               <div class="text-sm font-bold">ওয়ারিশ সূত্রে নামজারি</div>
@@ -75,19 +76,19 @@
       <div class="bg-white border-b border-slate-200 px-6 py-4">
         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">২. ব্যক্তির ক্যাটাগরি নির্বাচন করুন <span class="text-rose-500">*</span></label>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-emerald-600 bg-emerald-50/50 text-emerald-900 font-bold text-sm text-center">
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-custom border-emerald-600 bg-emerald-50/50 text-emerald-900 font-bold text-sm text-center">
             <input type="radio" name="person_category" value="adult" checked class="text-emerald-600">
             <span>প্রাপ্ত বয়স্ক</span>
           </label>
-          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
             <input type="radio" name="person_category" value="minor" class="text-emerald-600">
             <span>অপ্রাপ্ত বয়স্ক</span>
           </label>
-          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
             <input type="radio" name="person_category" value="expat" class="text-emerald-600">
             <span>প্রবাসী</span>
           </label>
-          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-all-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
+          <label class="category-card flex items-center justify-center gap-2 p-2.5 border-2 rounded-xl cursor-pointer transition-custom border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-sm text-center">
             <input type="radio" name="person_category" value="freedom_fighter" class="text-emerald-600">
             <span>বীর মুক্তিযোদ্ধা</span>
           </label>
@@ -282,36 +283,22 @@
         </div>
       </form>
 
-      <!-- Customer Success Share Modal -->
-      <div id="outputModal" class="hidden p-6 sm:p-8 bg-emerald-50 border-t border-emerald-200">
-        <div class="text-center mb-5">
-          <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-emerald-950">আপনার তথ্য সফলভাবে প্রস্তুত হয়েছে!</h3>
-          <p class="text-sm text-emerald-700">নিচের সবুজ বাটনে চাপ দিয়ে সরাসরি হোয়াটসঅ্যাপে পাঠিয়ে দিন</p>
+      <!-- Customer Clean Success Modal (No scary code, just 1 big beautiful button) -->
+      <div id="outputModal" class="hidden p-6 sm:p-8 bg-emerald-50 border-t border-emerald-200 text-center">
+        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
+          <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
         </div>
+        <h3 class="text-xl font-bold text-emerald-950 mb-1">আপনার তথ্য সফলভাবে প্রস্তুত হয়েছে!</h3>
+        <p class="text-sm text-emerald-700 mb-5">নিচের বাটনে একবার চাপ দিয়ে সরাসরি হোয়াটসঅ্যাপে পাঠিয়ে দিন</p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-          <button id="btnWhatsAppShare" type="button" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg">
-            <span>📲 হোয়াটসঅ্যাপে পাঠান</span>
-          </button>
-          <button id="btnOpenInOfficePanel" type="button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-base transition flex items-center justify-center gap-2 shadow-lg">
-            <span>🖥️ অফিস ক্লিপবোর্ড প্যানেল দেখুন</span>
-          </button>
-        </div>
-
-        <div class="bg-white p-3.5 rounded-xl border border-emerald-200 shadow-sm">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">তথ্য কপি কোড:</span>
-            <button id="btnCopyJson" type="button" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1 rounded-md border border-slate-300">
-              📋 কপি
-            </button>
-          </div>
-          <textarea id="jsonOutput" rows="4" readonly class="w-full text-xs font-mono bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-slate-600 focus:outline-none"></textarea>
-        </div>
+        <button id="btnWhatsAppShare" type="button" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-8 rounded-xl text-base shadow-lg hover:shadow-xl transition transform active:scale-95">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.275.072.376-.044c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/>
+          </svg>
+          <span>📲 হোয়াটসঅ্যাপে পাঠিয়ে দিন</span>
+        </button>
       </div>
 
     </div>
@@ -330,62 +317,44 @@
             </svg>
           </div>
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold tracking-tight">স্মার্ট ক্লিপবোর্ড প্যানেল (অফিস ও বাসা)</h2>
-            <p class="text-indigo-200 text-xs sm:text-sm">কাগজের লেখা না বুঝে ভুল হওয়ার ভয় নেই — ১-ক্লিকে কপি ও পেস্ট করুন</p>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-tight">স্মার্ট অফিস ক্লিপবোর্ড প্যানেল</h2>
+            <p class="text-indigo-200 text-xs sm:text-sm">প্রতিটি তথ্য ১-ক্লিকে কপি করুন ও ল্যান্ড পোর্টালে নির্ভুলভাবে পেস্ট করুন</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full text-xs font-semibold flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            ১০০% নিরাপদ ও ম্যানুয়াল কন্ট্রোল
+            ১০০% নিরাপদ ও নির্ভুল
           </span>
         </div>
       </div>
 
-      <!-- Quick Paste Input Box -->
-      <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
-        <label class="block text-sm font-bold text-slate-700 mb-2 flex items-center justify-between">
-          <span>হোয়াটসঅ্যাপ মেসেজ বা কোড পেস্ট করুন:</span>
-          <button id="btnPasteClipboardDirect" type="button" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold px-2.5 py-1 rounded-lg border border-indigo-200 transition">
-            📋 ক্লিপবোর্ড থেকে অটো-পেস্ট
-          </button>
-        </label>
-        <div class="flex gap-2">
-          <textarea id="officeRawInput" rows="2" placeholder="হোয়াটসঅ্যাপ থেকে মেসেজটি কপি করে এখানে পেস্ট করুন..."
-                    class="w-full text-xs font-mono p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 text-slate-700"></textarea>
-          <button id="btnOfficeLoadData" type="button" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 rounded-xl transition flex flex-col items-center justify-center gap-1 shrink-0 text-sm shadow">
-            <span>লোড করুন</span>
-          </button>
-        </div>
-      </div>
-
       <!-- Applicant Info Banner -->
-      <div id="applicantBanner" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
-        <div class="flex items-center gap-3">
-          <div id="applicantPhotoHolder" class="w-12 h-12 rounded-xl bg-emerald-200 border border-emerald-300 overflow-hidden flex items-center justify-center shrink-0">
-            <img id="officePhotoImg" src="" class="w-full h-full object-cover hidden" alt="ছবি">
-            <svg id="officePhotoIcon" class="w-6 h-6 text-emerald-700" fill="currentColor" viewBox="0 0 24 24">
+      <div id="applicantBanner" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-xl bg-emerald-200 border border-emerald-300 overflow-hidden flex items-center justify-center shrink-0 shadow-inner">
+            <svg class="w-7 h-7 text-emerald-700" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
           </div>
           <div>
-            <div class="flex items-center gap-2">
-              <h3 id="displayApplicantName" class="text-base font-bold text-slate-800">—</h3>
-              <span id="badgeAppType" class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-emerald-600 text-white">সাধারণ নামজারি</span>
-              <span id="badgeCategory" class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-slate-200 text-slate-700">প্রাপ্ত বয়স্ক</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 id="displayApplicantName" class="text-lg font-bold text-slate-800">—</h3>
+              <span id="badgeAppType" class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-emerald-600 text-white">সাধারণ নামজারি</span>
+              <span id="badgeCategory" class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-slate-200 text-slate-700">প্রাপ্ত বয়স্ক</span>
             </div>
-            <p id="displayContact" class="text-xs text-slate-500 mt-0.5">মোবাইল: — | এনআইডি: —</p>
+            <p id="displayContact" class="text-xs text-slate-600 font-medium mt-1">মোবাইল: — | এনআইডি/জন্মনিবন্ধন: —</p>
           </div>
         </div>
-        <div class="flex items-center gap-2">
-          <button id="btnAutoFillTrigger" type="button" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
-            <span>⚡ ১-ক্লিক অটোফিল কোড কপি</span>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <button id="btnCopyAllWinV" type="button" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow flex items-center justify-center gap-1.5">
+            <span>🚀 সব তথ্য ক্লিপবোর্ডে কপি (Win+V)</span>
           </button>
         </div>
       </div>
 
       <!-- Field-by-Field 1-Click Copy Cards -->
-      <div id="fieldsContainer" class="hidden space-y-4">
+      <div id="fieldsContainer" class="space-y-4">
         
         <!-- Personal & Identity Information -->
         <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-3">
@@ -398,111 +367,111 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <!-- NID/Birth Certificate -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
-                <span id="lblFieldDocNo" class="text-[11px] font-semibold text-slate-500 block">জাতীয় পরিচয়পত্র</span>
+                <span id="lblFieldDocNo" class="text-[11px] font-semibold text-slate-500 block">জাতীয় পরিচয়পত্র / জন্মনিবন্ধন</span>
                 <span id="valFieldDocNo" class="text-sm font-bold text-slate-800 font-mono truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldDocNo', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldDocNo', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- DOB -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">জন্মতারিখ (YYYY-MM-DD)</span>
                 <span id="valFieldDob" class="text-sm font-bold text-slate-800 font-mono truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldDob', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldDob', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Name -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">আবেদনকারী / গ্রহীতার নাম</span>
                 <span id="valFieldName" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldName', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldName', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Father -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">পিতার নাম</span>
                 <span id="valFieldFather" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldFather', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldFather', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Mother -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">মাতার নাম</span>
                 <span id="valFieldMother" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldMother', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldMother', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Gender -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">লিঙ্গ</span>
                 <span id="valFieldGender" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldGender', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldGender', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Guardian (General) -->
-            <div id="cardGuardian" class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div id="cardGuardian" class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">অভিভাবকের নাম</span>
                 <span id="valFieldGuardian" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldGuardian', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldGuardian', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Deceased Relation (Warish) -->
-            <div id="cardRelation" class="hidden copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div id="cardRelation" class="hidden copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">মৃত ব্যক্তির সাথে সম্পর্ক</span>
                 <span id="valFieldRelation" class="text-sm font-bold text-emerald-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldRelation', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldRelation', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Mobile -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">মোবাইল নম্বর</span>
                 <span id="valFieldMobile" class="text-sm font-bold text-slate-800 font-mono truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldMobile', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldMobile', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
             <!-- Email -->
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-indigo-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">ইমেইল</span>
                 <span id="valFieldEmail" class="text-sm font-medium text-slate-700 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldEmail', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldEmail', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-indigo-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
@@ -520,32 +489,32 @@
 
           <!-- Division, District, Upazila -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">বিভাগ</span>
                 <span id="valFieldDivision" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldDivision', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldDivision', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">জেলা</span>
                 <span id="valFieldDistrict" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldDistrict', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldDistrict', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">উপজেলা/সার্কেল</span>
                 <span id="valFieldUpazila" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldUpazila', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldUpazila', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
@@ -553,42 +522,42 @@
 
           <!-- General Address Cards -->
           <div id="secGeneralAddress" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">বাসা/হোল্ডিং নম্বর</span>
                 <span id="valFieldHolding" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldHolding', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldHolding', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">গ্রাম/রাস্তা</span>
                 <span id="valFieldVillage" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldVillage', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldVillage', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">ডাকঘর</span>
                 <span id="valFieldPost" class="text-sm font-bold text-slate-800 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldPost', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldPost', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
 
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-2 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">সিটি-কর্পোরেশন</span>
                 <span id="valFieldCity" class="text-sm font-medium text-slate-700 truncate block">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldCity', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">
+              <button onclick="copyFieldValue('valFieldCity', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-lg border border-slate-300 transition shadow-sm">
                 <span>📋 কপি</span>
               </button>
             </div>
@@ -596,12 +565,12 @@
 
           <!-- Warish Single Address Card -->
           <div id="secWarishAddress" class="hidden pt-2">
-            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between hover:border-emerald-300 transition">
+            <div class="copy-card bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between hover:border-emerald-300 transition-custom shadow-sm">
               <div class="pr-3 overflow-hidden">
                 <span class="text-[11px] font-semibold text-slate-500 block">ঠিকানা (একক লাইন)</span>
                 <span id="valFieldSingleAddress" class="text-sm font-bold text-slate-800 block leading-snug">—</span>
               </div>
-              <button onclick="copyFieldValue('valFieldSingleAddress', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-4 py-2 rounded-lg border border-slate-300 transition shadow-sm flex items-center gap-1.5">
+              <button onclick="copyFieldValue('valFieldSingleAddress', this)" type="button" class="btn-copy shrink-0 bg-white hover:bg-emerald-600 hover:text-white text-slate-700 font-semibold text-xs px-4 py-2.5 rounded-lg border border-slate-300 transition shadow-sm flex items-center gap-1.5">
                 <span>📋 পূর্ণ ঠিকানা কপি</span>
               </button>
             </div>
@@ -761,6 +730,7 @@
       }
     });
 
+    // Form Submit
     document.getElementById('grohitaForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -805,31 +775,20 @@
         address_single: addressSingle
       };
 
-      const jsonString = JSON.stringify(payload, null, 2);
-      document.getElementById('jsonOutput').value = jsonString;
+      // Store in memory for WhatsApp share
+      officeActiveData = payload;
+
       document.getElementById('outputModal').classList.remove('hidden');
       document.getElementById('outputModal').scrollIntoView({ behavior: 'smooth' });
 
       // Pre-load into office view
       renderOfficeData(payload);
-      document.getElementById('officeDataBadge').classList.remove('hidden');
     });
 
-    document.getElementById('btnCopyJson').addEventListener('click', function() {
-      const txt = document.getElementById('jsonOutput').value;
-      navigator.clipboard.writeText(txt).then(() => {
-        this.innerHTML = "<span>✅ কপি হয়েছে!</span>";
-        setTimeout(() => { this.innerHTML = "📋 কপি"; }, 2000);
-      });
-    });
-
-    // WhatsApp Share with Magic Link
+    // Clean, Aesthetic WhatsApp Share (NO scary JSON code! Only clean greeting + 1 magic link)
     document.getElementById('btnWhatsAppShare').addEventListener('click', function() {
-      const rawJson = document.getElementById('jsonOutput').value;
-      if (!rawJson) return;
-      const d = JSON.parse(rawJson);
-      const isWarish = d.application_type === 'warish';
-      const isMinor = d.category === 'minor';
+      if (!officeActiveData) return;
+      const d = officeActiveData;
 
       // Create URL-safe encoded data for 1-click office open
       const compactPayload = JSON.stringify(d);
@@ -837,35 +796,18 @@
       const currentUrl = window.location.href.split('#')[0].split('?')[0];
       const magicLink = `${currentUrl}#data=${base64Data}`;
 
-      const summary = 
-`📋 *ই-নামজারি আবেদনকারী/গ্রহীতার তথ্য*
----------------------------------------
-📂 আবেদন: ${isWarish ? 'ওয়ারিশ সূত্রে নামজারি' : 'সাধারণ নামজারি'}
-👤 ধরন: ${isMinor ? 'অপ্রাপ্ত বয়স্ক' : 'প্রাপ্ত বয়স্ক'}
-🆔 ${isMinor ? 'জন্ম নিবন্ধন' : 'এনআইডি'}: ${d.certificate_no}
-📅 জন্মতারিখ: ${d.dob}
-✍️ নাম: ${d.applicant_name}
-👨‍🦳 পিতা: ${d.father_name}
-🧕 মাতা: ${d.mother_name}
-🚻 লিঙ্গ: ${d.gender}
-${isWarish ? `👥 সম্পর্ক: ${d.deceased_relation}` : `🛡️ অভিভাবক: ${d.guardian_name || d.father_name}`}
+      const shortCleanMessage = 
+`আসসালামু আলাইকুম।
+আমার ই-নামজারি (খারিজ) গ্রহীতার তথ্য পূরণ করা হয়েছে।
+
+👤 আবেদনকারী: ${d.applicant_name}
 📞 মোবাইল: ${d.mobile}
-${d.email ? `📧 ইমেইল: ${d.email}\n` : ''}📍 বিভাগ: ${d.division}, জেলা: ${d.district}, উপজেলা: ${d.upazila}
-🏠 ঠিকানা: ${d.address_single || (d.holding_no + ', ' + d.village_road + ', ' + d.post_office)}
----------------------------------------
-🔗 *অফিস প্যানেল ওপেন লিংক (১-ক্লিক কপি):*
-${magicLink}
----------------------------------------
-\`\`\`json
-${rawJson}
-\`\`\``;
 
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(summary)}`;
+🔗 সম্পূর্ণ তথ্যের অফিস লিংক:
+${magicLink}`;
+
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shortCleanMessage)}`;
       window.open(waUrl, '_blank');
-    });
-
-    document.getElementById('btnOpenInOfficePanel').addEventListener('click', function() {
-      switchMainView('office');
     });
 
     // --- OFFICE PANEL LOGIC ---
@@ -877,9 +819,10 @@ ${rawJson}
 
       navigator.clipboard.writeText(text).then(() => {
         const originalHtml = btn.innerHTML;
-        btn.innerHTML = `<span class="text-emerald-600 font-bold">✅ কপি হয়েছে</span>`;
+        btn.innerHTML = `<span class="text-emerald-700 font-bold">✅ কপি হয়েছে</span>`;
         btn.classList.add('bg-emerald-50', 'border-emerald-400');
-        btn.closest('.copy-card').classList.add('border-emerald-400', 'bg-emerald-50/50');
+        const card = btn.closest('.copy-card');
+        if (card) card.classList.add('card-copied');
 
         setTimeout(() => {
           btn.innerHTML = originalHtml;
@@ -887,44 +830,48 @@ ${rawJson}
       });
     }
 
-    function parseRawText(raw) {
-      raw = raw.trim();
-      // Try JSON
-      if (raw.startsWith('{') && raw.endsWith('}')) {
-        try { return JSON.parse(raw); } catch (e) {}
-      }
-      // Try code block
-      const codeMatch = raw.match(/```json\s*([\s\S]*?)\s*```/) || raw.match(/```([\s\S]*?)```/);
-      if (codeMatch) {
-        try { return JSON.parse(codeMatch[1]); } catch (e) {}
-      }
-      // Try Key-Value parsing
-      const d = {};
-      const lines = raw.split('\n');
-      for (let line of lines) {
-        const parts = line.split(/[:：]/);
-        if (parts.length >= 2) {
-          const key = parts[0].trim().toLowerCase();
-          const val = parts.slice(1).join(':').trim();
-          if (key.includes('নাম') && !key.includes('পিতা') && !key.includes('মাতা') && !key.includes('অভিভাবক')) d.applicant_name = val;
-          else if (key.includes('পিতা')) d.father_name = val;
-          else if (key.includes('মাতা')) d.mother_name = val;
-          else if (key.includes('এনআইডি') || key.includes('জাতীয় পরিচয়পত্র')) { d.certificate_no = val; d.certificate_type = 'nid'; }
-          else if (key.includes('জন্ম নিবন্ধন')) { d.certificate_no = val; d.certificate_type = 'birth_certificate'; d.category = 'minor'; }
-          else if (key.includes('জন্মতারিখ')) d.dob = val;
-          else if (key.includes('লিঙ্গ')) d.gender = val;
-          else if (key.includes('অভিভাবক')) d.guardian_name = val;
-          else if (key.includes('সম্পর্ক')) { d.deceased_relation = val; d.application_type = 'warish'; }
-          else if (key.includes('মোবাইল')) d.mobile = val;
-          else if (key.includes('ইমেইল') || key.includes('মেইল')) d.email = val;
-          else if (key.includes('বিভাগ')) d.division = val;
-          else if (key.includes('জেলা')) d.district = val;
-          else if (key.includes('উপজেলা')) d.upazila = val;
-          else if (key.includes('ঠিকানা')) { d.address_single = val; d.application_type = 'warish'; }
+    // Windows Win+V Clipboard History Push (sequential copy with 120ms gap)
+    document.getElementById('btnCopyAllWinV').addEventListener('click', async function() {
+      if (!officeActiveData) return;
+      const d = officeActiveData;
+      const isWarish = d.application_type === 'warish';
+
+      // Items to push (in reverse order, so the top item in Win+V will be NID/Birth Certificate!)
+      const items = [
+        { label: "ঠিকানা", val: d.address_single || `${d.village_road}, ${d.post_office}` },
+        { label: "উপজেলা", val: d.upazila },
+        { label: "জেলা", val: d.district },
+        { label: "বিভাগ", val: d.division },
+        { label: "মোবাইল", val: d.mobile },
+        { label: isWarish ? "সম্পর্ক" : "অভিভাবক", val: isWarish ? d.deceased_relation : (d.guardian_name || d.father_name) },
+        { label: "লিঙ্গ", val: d.gender },
+        { label: "মাতার নাম", val: d.mother_name },
+        { label: "পিতার নাম", val: d.father_name },
+        { label: "আবেদনকারীর নাম", val: d.applicant_name },
+        { label: "জন্মতারিখ", val: d.dob },
+        { label: "পরিচয়পত্র/জন্মনিবন্ধন নম্বর", val: d.certificate_no }
+      ];
+
+      const btn = this;
+      btn.innerHTML = "<span>⏳ ক্লিপবোর্ডে কপি হচ্ছে...</span>";
+
+      for (let item of items) {
+        if (item.val) {
+          await navigator.clipboard.writeText(item.val);
+          await new Promise(r => setTimeout(r, 120));
         }
       }
-      return Object.keys(d).length > 2 ? d : null;
-    }
+
+      btn.innerHTML = "<span>✅ সব তথ্য ক্লিপবোর্ডে যুক্ত হয়েছে!</span>";
+      // Highlight all cards
+      document.querySelectorAll('.copy-card').forEach(c => c.classList.add('card-copied'));
+
+      alert("🎉 আলহামদুলিল্লাহ! সকল তথ্য আপনার উইন্ডোজ ক্লিপবোর্ডে জমা হয়েছে।\n\nএখন ল্যান্ড পোর্টালে গিয়ে কিবোর্ডে [ Win + V ] চাপুন এবং একটির পর একটি তথ্য পেস্ট করে দিন!");
+
+      setTimeout(() => {
+        btn.innerHTML = "<span>🚀 সব তথ্য ক্লিপবোর্ডে কপি (Win+V)</span>";
+      }, 4000);
+    });
 
     function renderOfficeData(d) {
       officeActiveData = d;
@@ -934,8 +881,8 @@ ${rawJson}
       document.getElementById('displayApplicantName').textContent = d.applicant_name || 'নাম পাওয়া যায়নি';
       document.getElementById('badgeAppType').textContent = isWarish ? 'ওয়ারিশ সূত্রে নামজারি' : 'সাধারণ নামজারি';
       document.getElementById('badgeAppType').className = isWarish 
-        ? 'text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-600 text-white'
-        : 'text-[11px] px-2 py-0.5 rounded-full font-bold bg-emerald-600 text-white';
+        ? 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-600 text-white'
+        : 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-emerald-600 text-white';
 
       document.getElementById('badgeCategory').textContent = isMinor ? 'অপ্রাপ্ত বয়স্ক' : 'প্রাপ্ত বয়স্ক';
       document.getElementById('displayContact').textContent = `মোবাইল: ${d.mobile || '—'} | ${isMinor ? 'জন্মনিবন্ধন' : 'এনআইডি'}: ${d.certificate_no || '—'}`;
@@ -977,46 +924,9 @@ ${rawJson}
         document.getElementById('valFieldPost').textContent = d.post_office || '—';
         document.getElementById('valFieldCity').textContent = d.city_corporation || '—';
       }
-
-      document.getElementById('applicantBanner').classList.remove('hidden');
-      document.getElementById('fieldsContainer').classList.remove('hidden');
     }
 
-    document.getElementById('btnOfficeLoadData').addEventListener('click', function() {
-      const raw = document.getElementById('officeRawInput').value;
-      if (!raw.trim()) {
-        alert("দয়া করে গ্রাহকের মেসেজটি পেস্ট করুন।");
-        return;
-      }
-      const data = parseRawText(raw);
-      if (!data) {
-        alert("❌ তথ্য পড়া যায়নি! অনুগ্রহ করে মেসেজটি সঠিকভাবে পেস্ট করুন।");
-        return;
-      }
-      renderOfficeData(data);
-    });
-
-    document.getElementById('btnPasteClipboardDirect').addEventListener('click', async function() {
-      try {
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          document.getElementById('officeRawInput').value = text;
-          document.getElementById('btnOfficeLoadData').click();
-        }
-      } catch (err) {
-        alert("ক্লিপবোর্ডের পারমিশন দিন অথবা বক্সে রাইট ক্লিক করে পেস্ট করুন।");
-      }
-    });
-
-    document.getElementById('btnAutoFillTrigger').addEventListener('click', function() {
-      if (!officeActiveData) return;
-      const jsonStr = JSON.stringify(officeActiveData);
-      navigator.clipboard.writeText(jsonStr).then(() => {
-        alert("⚡ অটোফিল কোড কপি হয়েছে!\n\nআপনি চাইলে ল্যান্ড পোর্টালে বুকমার্কলেটে ক্লিক করে এক ক্লিকেও পূরণ করতে পারেন।");
-      });
-    });
-
-    // Check URL Hash or Params on startup
+    // Check URL Hash on startup (Automatic 1-Click Office View when clicking WhatsApp link)
     window.addEventListener('DOMContentLoaded', () => {
       updateAppTypeUI(false);
       updateCategoryUI('adult');
@@ -1027,7 +937,6 @@ ${rawJson}
           const encoded = hash.split('data=')[1];
           const decoded = decodeURIComponent(escape(atob(encoded)));
           const parsed = JSON.parse(decoded);
-          document.getElementById('officeRawInput').value = decoded;
           renderOfficeData(parsed);
           switchMainView('office');
         } catch (e) {
