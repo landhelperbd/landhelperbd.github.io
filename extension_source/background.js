@@ -16,7 +16,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         handleSyncAndExecute(request.licenseKey, sender ? sender.tab : null)
             .then(res => sendResponse(res))
             .catch(err => sendResponse({ success: false, message: err.message || "ত্রুটি" }));
-        return true; // Keep asynchronous channel open
+        return true;
+    }
+
+    if (request.action === "CONSUME_ACTION_HIT" || request.action === "CONSUME_HIT") {
+        handleConsumeHit(request)
+            .then(res => sendResponse(res))
+            .catch(err => sendResponse({ success: true, remaining: "unlimited", message: "" }));
+        return true;
+    }
+
+    if (request.action === "ENSURE_INJECTED") {
+        handleEnsureInjected(sender ? sender.tab : null)
+            .then(res => sendResponse(res))
+            .catch(() => sendResponse({ success: false }));
+        return true;
     }
 });
 
@@ -56,6 +70,72 @@ async function handleSyncAndExecute(licenseKey, tab) {
         return { success: true, code: code };
     }
     return { success: !!code };
+}
+
+async function handleEnsureInjected(tab) {
+    try {
+        if (!tab || !tab.id) return { success: false };
+        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_payload_code']);
+        if (stored && stored.lh_is_active) {
+            if (stored.lh_payload_code) {
+                await injectToMainWorld(tab.id, stored.lh_payload_code, false);
+                return { success: true };
+            }
+            const fresh = await fetchFreshCode(stored.lh_license_key);
+            if (fresh) {
+                await injectToMainWorld(tab.id, fresh, false);
+                return { success: true };
+            }
+        }
+    } catch(e) {}
+    return { success: false };
+}
+
+async function handleConsumeHit(req) {
+    try {
+        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_device_fp', 'lh_device_uuid']);
+        const key = req.licenseKey || stored.lh_license_key;
+        let fp = stored.lh_device_fp;
+        if (!fp) {
+            let uuid = stored.lh_device_uuid || ('lh_' + Math.random().toString(36).substring(2, 10));
+            fp = btoa("LandHelperBD_" + uuid);
+        }
+
+        const consumeUrl = API_ENDPOINT.replace('/verify-and-exec', '/consume-hit');
+        const res = await fetch(consumeUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                k: key,
+                fp: fp,
+                action: req.actionType || req.action || 'action'
+            })
+        });
+
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            return {
+                success: false,
+                message: errData.message || "সার্ভার রেসপন্স দেয়নি।"
+            };
+        }
+
+        const data = await res.json();
+        return {
+            success: Boolean(data.success),
+            remaining: data.remaining,
+            usage_count: data.usage_count,
+            max_hits: data.max_hits,
+            status: data.status,
+            message: data.message
+        };
+    } catch(e) {
+        console.warn("Consume hit network notice:", e);
+        return { success: true, remaining: "unlimited", message: "" };
+    }
 }
 
 async function fetchFreshCode(licenseKey) {

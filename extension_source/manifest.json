@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Land Helper BD | Pro Assistant",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "সরকারি নামজারি পোর্টালে (mutation.land.gov.bd) কাজ সহজ ও দ্রুত করার জন্য স্বয়ংক্রিয় প্রো সহকারী এক্সটেনশন।",
   "icons": {
     "16": "icon-16.png",
@@ -39,7 +39,7 @@
         "https://*.land.gov.bd/*"
       ],
       "js": [
-        "content.js"
+        "bridge.js"
       ],
       "run_at": "document_idle"
     }
