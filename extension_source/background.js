@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Auto-inject when user navigates to mutation portal with Live Sync
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     try {
-        if (changeInfo.status === 'complete' && tab && tab.url && tab.url.includes("mutation.land.gov.bd")) {
+        if ((changeInfo.status === 'complete' || changeInfo.url) && tab && tab.url && tab.url.includes("mutation.land.gov.bd")) {
             const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_payload_code']);
             if (stored && stored.lh_is_active && stored.lh_license_key) {
                 // 1. Immediate execution from cache (Zero latency for user)
@@ -179,7 +179,7 @@ async function injectToMainWorld(tabId, codeStr, forceReload = false) {
             world: "MAIN",
             func: function(code, forceUpd) {
                 try {
-                    if (forceUpd) {
+                    if (forceUpd || !document.getElementById('_lh_bar')) {
                         var oldHost = document.getElementById('_lh_host_root') || document.getElementById('_lh_bar');
                         if (oldHost) oldHost.remove();
                         window._lh_pro_initialized = false;

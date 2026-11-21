@@ -331,24 +331,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showActiveScreen(keyToVerify);
                 showStatus("✅ আপনার লাইসেন্সটি সক্রিয় রয়েছে!", "success");
 
-                // Injected into mutation tab if currently open
+                // Auto-inject into all open mutation tabs across all windows
                 try {
-                    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-                    const currentTab = tabs && tabs[0];
-                    if (currentTab && currentTab.id && currentTab.url && currentTab.url.includes("mutation.land.gov.bd")) {
-                        await chrome.scripting.executeScript({
-                            target: { tabId: currentTab.id },
-                            world: "MAIN",
-                            func: function(codeToRun) {
-                                try {
-                                    if (!window._lh_pro_initialized) {
+                    const tabs = await chrome.tabs.query({ url: "*://*.land.gov.bd/*" });
+                    for (const mTab of (tabs || [])) {
+                        if (mTab && mTab.id) {
+                            chrome.scripting.executeScript({
+                                target: { tabId: mTab.id },
+                                world: "MAIN",
+                                func: function(codeToRun) {
+                                    try {
+                                        var oldHost = document.getElementById('_lh_host_root') || document.getElementById('_lh_bar');
+                                        if (oldHost) oldHost.remove();
+                                        window._lh_pro_initialized = false;
                                         eval(codeToRun);
                                         window._lh_pro_initialized = true;
-                                    }
-                                } catch(e) {}
-                            },
-                            args: [data.code]
-                        });
+                                    } catch(e) {}
+                                },
+                                args: [data.code]
+                            }).catch(() => {});
+                        }
                     }
                 } catch(e) {}
 
