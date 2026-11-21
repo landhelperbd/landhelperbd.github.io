@@ -8,13 +8,13 @@
   "status": "active",
   "notice": {
     "id": "notice-v1-3-2",
-    "enabled": true,
+    "enabled": false,
     "type": "update",
     "dismissible": true,
-    "title": "🎉 লাইভ সিঙ্ক ও ক্লিকেবল বাটন ফিক্স (v1.3.2)!",
+    "title": "🎉 ল্যান্ড হেল্পার বিডি প্রো সক্রিয়!",
     "body": "নামজারি পোর্টালে রিসেট, ১৮+ মোড এবং অফলাইন প্রতিনিধির সরাসরি লাইভ অ্যাকশন নিশ্চিত করা হয়েছে।",
-    "actionText": "আপডেট ডাউনলোড",
-    "actionUrl": "https://landhelperbd.github.io/downloads/Land_Helper_BD_Pro_v1.3.2.zip"
+    "actionText": "ডাউনলোড",
+    "actionUrl": "https://landhelperbd.github.io/Land_Helper_BD_Pro.zip"
   },
   "portal_notice": {
     "enabled": false,
@@ -26,6 +26,6 @@
     "age_label": "🔞 ১৮+",
     "rep_label": "👥 অফলাইন"
   },
-  "update_url": "https://landhelperbd.github.io/downloads/Land_Helper_BD_Pro_v1.3.2.zip",
+  "update_url": "https://landhelperbd.github.io/Land_Helper_BD_Pro.zip",
   "whatsapp": "8801327727050"
 }

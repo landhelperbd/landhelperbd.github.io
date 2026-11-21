@@ -31,14 +31,7 @@
     // Initial broadcast
     syncLicenseData();
 
-    // Ensure MAIN world payload is active
-    try {
-        chrome.runtime.sendMessage({ action: "ENSURE_INJECTED" }, function() {
-            if (chrome.runtime.lastError) {}
-        });
-    } catch(e) {}
-
-    // Listen to messages from server-injected script (MAIN world)
+    // Listen to messages from content.js or server-injected scripts (MAIN world)
     window.addEventListener('message', function(e) {
         if (e.source !== window || !e.data) return;
 
@@ -48,7 +41,7 @@
             return;
         }
 
-        // Action hit consumption request
+        // Action hit consumption request (supports both LH_CONSUME_ACTION_REQ and LH_CONSUME_HIT_REQ)
         if (e.data.type === 'LH_CONSUME_ACTION_REQ' || e.data.type === 'LH_CONSUME_HIT_REQ') {
             const reqId = e.data.reqId;
             const actionType = e.data.action || e.data.actionType || 'action';
@@ -68,7 +61,7 @@
                     remaining: res ? res.remaining : undefined,
                     usage_count: res ? res.usage_count : undefined,
                     max_hits: res ? res.max_hits : undefined,
-                    message: (res && res.message) || (lastErr ? lastErr.message : '')
+                    message: (res && res.message) || (lastErr ? lastErr.message : 'সার্ভার সংযোগ পাওয়া যায়নি।')
                 };
                 window.postMessage({ type: 'LH_CONSUME_ACTION_RES', ...payload }, '*');
                 window.postMessage({ type: 'LH_CONSUME_HIT_RES', ...payload }, '*');

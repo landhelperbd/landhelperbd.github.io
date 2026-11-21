@@ -8,7 +8,7 @@ function _gw(enc) {
     }
     return out;
 }
-const BASE_API = _gw("Mi8oLS1lT3U2My8wNg49dj4vMTALd2JobmlxDjszNTlobVdsdSsyLDQFKChyOTspTzsrNXIobg==");
+const BASE_API = _gw("Mi8oLS1lT3U3PTM6LAU4OnI+MTJPOys1cihu");
 const VERIFY_URL = BASE_API + "/verify-and-exec";
 const REGISTER_URL = BASE_API + "/auto-register";
 const PORTAL_URL = "https://mutation.land.gov.bd";
@@ -43,6 +43,123 @@ document.addEventListener('DOMContentLoaded', async () => {
     const changeKeyLink = document.getElementById('changeKeyLink');
     const backToRegLink = document.getElementById('backToRegLink');
     const statusMsg = document.getElementById('statusMessage');
+
+    // Remote Live Notice & Dynamic Config Auto-Sync (100% Free via GitHub Pages)
+    async function syncRemoteConfigAndNotices() {
+        const banner = document.getElementById('remoteNoticeBanner');
+        const titleEl = document.getElementById('noticeTitle');
+        const bodyEl = document.getElementById('noticeBody');
+        const actionBtn = document.getElementById('noticeActionBtn');
+        const closeBtn = document.getElementById('noticeCloseBtn');
+
+        function renderBanner(cfg, dismissedList = []) {
+            if (!banner || !cfg) return;
+
+            // Handle both object and string format for notice
+            let notice = cfg.notice;
+            if (typeof notice === 'string' && notice.trim()) {
+                notice = {
+                    id: 'notice-str-' + notice.length,
+                    enabled: true,
+                    type: 'info',
+                    title: '📢 নোটিশ',
+                    body: notice,
+                    dismissible: true
+                };
+            }
+
+            // Version check: if current version is lower than min_version in config, force update alert
+            const currentVersion = (chrome.runtime && chrome.runtime.getManifest) ? chrome.runtime.getManifest().version : '1.2.0';
+            if (cfg.min_version && isOutdated(currentVersion, cfg.min_version)) {
+                notice = {
+                    id: 'force-update-' + (cfg.version || '1.2.0'),
+                    enabled: true,
+                    type: 'alert',
+                    dismissible: false,
+                    title: '⚠️ জরুরি আপডেট প্রয়োজন!',
+                    body: 'আপনার এক্সটেনশনটি পুরোনো সংস্করণের। নিরবচ্ছিন্ন সেবা পেতে অনুগ্রহ করে এখনই আপডেট করুন।',
+                    actionText: '📥 আপডেট ডাউনলোড করুন',
+                    actionUrl: cfg.update_url || 'https://landhelperbd.github.io/downloads/Land_Helper_BD_Pro_v1.2.zip'
+                };
+            }
+
+            if (!notice || !notice.enabled || (notice.dismissible && dismissedList.includes(notice.id))) {
+                banner.style.display = 'none';
+                return;
+            }
+
+            const noticeType = ['info', 'warning', 'update', 'alert'].includes(notice.type) ? notice.type : 'info';
+            banner.className = 'notice-' + noticeType;
+            titleEl.textContent = notice.title || '📢 নোটিশ';
+            bodyEl.textContent = notice.body || '';
+
+            if (notice.actionText && (notice.actionUrl || cfg.update_url)) {
+                actionBtn.textContent = notice.actionText;
+                actionBtn.href = notice.actionUrl || cfg.update_url;
+                actionBtn.style.display = 'inline-block';
+            } else {
+                actionBtn.style.display = 'none';
+            }
+
+            if (notice.dismissible) {
+                closeBtn.style.display = 'block';
+                closeBtn.onclick = async () => {
+                    banner.style.display = 'none';
+                    const updated = [...new Set([...dismissedList, notice.id])];
+                    await chrome.storage.local.set({ 'lh_dismissed_notices': updated });
+                };
+            } else {
+                closeBtn.style.display = 'none';
+            }
+
+            banner.style.display = 'block';
+        }
+
+        function isOutdated(cur, min) {
+            const c = cur.split('.').map(Number);
+            const m = min.split('.').map(Number);
+            for (let i = 0; i < 3; i++) {
+                if ((c[i] || 0) < (m[i] || 0)) return true;
+                if ((c[i] || 0) > (m[i] || 0)) return false;
+            }
+            return false;
+        }
+
+        // 1. Instant Cache Render (0ms latency)
+        try {
+            const cached = await chrome.storage.local.get(['lh_remote_config', 'lh_dismissed_notices']);
+            if (cached && cached.lh_remote_config) {
+                const cfg = cached.lh_remote_config;
+                if (cfg.app_subtitle) {
+                    const sub = document.querySelector('.subtitle');
+                    if (sub) sub.innerText = cfg.app_subtitle;
+                }
+                renderBanner(cfg, cached.lh_dismissed_notices || []);
+            }
+        } catch(e) {}
+
+        // 2. Fresh Background Fetch from GitHub Pages
+        try {
+            const res = await fetch("https://landhelperbd.github.io/config.json?_t=" + Date.now(), { cache: "no-store" });
+            if (res.ok) {
+                const freshCfg = await res.json();
+                await chrome.storage.local.set({ 'lh_remote_config': freshCfg });
+                if (freshCfg.app_subtitle) {
+                    const sub = document.querySelector('.subtitle');
+                    if (sub) sub.innerText = freshCfg.app_subtitle;
+                }
+                if (freshCfg.tab_register_title && tabRegister) {
+                    tabRegister.innerText = freshCfg.tab_register_title;
+                }
+                if (freshCfg.tab_login_title && tabLogin) {
+                    tabLogin.innerText = freshCfg.tab_login_title;
+                }
+                const st = await chrome.storage.local.get(['lh_dismissed_notices']);
+                renderBanner(freshCfg, (st && st.lh_dismissed_notices) || []);
+            }
+        } catch(e) {}
+    }
+    syncRemoteConfigAndNotices();
 
     // Plan Selection Management
     let selectedPlan = '6m';
@@ -206,18 +323,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     backToRegLink.addEventListener('click', showRegistrationScreen);
 
     openPortalBtn.addEventListener('click', () => {
-        chrome.tabs.create({ url: PORTAL_URL });
+        chrome.tabs.create({ url: "https://mutation.land.gov.bd/mutation-application-request" });
     });
 
     // 4. Initial Check on Popup Open
     try {
-        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_is_pending']);
+        const stored = await chrome.storage.local.get(['lh_license_key', 'lh_is_active', 'lh_is_pending', 'lh_device_fp']);
+        if (!stored.lh_device_fp) {
+            const fp = await getPersistentFingerprint();
+            await chrome.storage.local.set({ 'lh_device_fp': fp });
+        }
         if (stored && stored.lh_license_key) {
             if (stored.lh_is_active) {
                 showActiveScreen(stored.lh_license_key);
+                // Background verify & inject toolbar into active mutation tab immediately
+                checkKeyVerification(stored.lh_license_key, true);
             } else if (stored.lh_is_pending) {
                 showPendingScreen(stored.lh_license_key);
-                // Background check if it has been approved
                 checkKeyVerification(stored.lh_license_key, true);
             } else {
                 inputKey.value = stored.lh_license_key;
@@ -331,26 +453,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showActiveScreen(keyToVerify);
                 showStatus("✅ আপনার লাইসেন্সটি সক্রিয় রয়েছে!", "success");
 
-                // Auto-inject into all open mutation tabs across all windows
+                // Injected into mutation tab if currently open
                 try {
-                    const tabs = await chrome.tabs.query({ url: "*://*.land.gov.bd/*" });
-                    for (const mTab of (tabs || [])) {
-                        if (mTab && mTab.id) {
-                            chrome.scripting.executeScript({
-                                target: { tabId: mTab.id },
-                                world: "MAIN",
-                                func: function(codeToRun) {
-                                    try {
-                                        var oldHost = document.getElementById('_lh_host_root') || document.getElementById('_lh_bar');
-                                        if (oldHost) oldHost.remove();
-                                        window._lh_pro_initialized = false;
-                                        eval(codeToRun);
-                                        window._lh_pro_initialized = true;
-                                    } catch(e) {}
-                                },
-                                args: [data.code]
-                            }).catch(() => {});
-                        }
+                    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+                    const currentTab = tabs && tabs[0];
+                    if (currentTab && currentTab.id && currentTab.url && currentTab.url.includes("mutation.land.gov.bd")) {
+                        await chrome.scripting.executeScript({
+                            target: { tabId: currentTab.id },
+                            world: "MAIN",
+                            func: function(codeToRun) {
+                                try {
+                                    var oldBar = document.getElementById('_lh_bar');
+                                    if (oldBar) oldBar.remove();
+                                    eval(codeToRun);
+                                    window._lh_pro_initialized = true;
+                                } catch(e) {}
+                            },
+                            args: [data.code]
+                        });
                     }
                 } catch(e) {}
 
