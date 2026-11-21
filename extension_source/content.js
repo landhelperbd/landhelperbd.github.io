@@ -256,42 +256,71 @@
         consumeHitAndRun('dob_18', '১৮+ মোড', function(remainingHits) {
             var modal = findModalComponent();
             if (modal && modal.recipientInformation) {
-                modal.recipientInformation.group = 'non-resident';
-                modal.calculateAge = function() { return 10; };
+                try {
+                    modal.recipientInformation.group = 'non-resident';
+                    modal.calculateAge = function() { return 10; };
+                    if (modal.hasOwnProperty('isApplicantUnder18Years')) {
+                        modal.isApplicantUnder18Years = true;
+                    }
+                } catch(e) {}
+
                 window.setDob = function(year, month, day) {
-                    modal.recipientInformation.dob = new Date(year, month - 1, day);
-                    showToast("✅ জন্মতারিখ সেট হয়েছে: " + year + "-" + month + "-" + day, "#059669");
-                    alert("✅ জন্মতারিখ: " + year + "-" + month + "-" + day);
+                    try {
+                        modal.recipientInformation.dob = new Date(year, month - 1, day);
+                        var dobInput = document.querySelector('#input_bangla_date_pick, input[placeholder*="তারিখ"], input[name*="dob"]');
+                        if (dobInput) {
+                            var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+                            dobInput.value = year + '-' + pad(month) + '-' + pad(day);
+                            dobInput.dispatchEvent(new Event('input', { bubbles: true }));
+                            dobInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                        showToast("✅ জন্মতারিখ সেট হয়েছে: " + year + "-" + month + "-" + day, "#059669");
+                        alert("✅ জন্মতারিখ: " + year + "-" + month + "-" + day);
+                    } catch(e) {}
                 };
 
                 // DOM Fallback: Remove max date constraint
                 var today = new Date().toISOString().split('T')[0];
-                document.querySelectorAll('input[type="date"], input[name*="dob"], input[id*="dob"]').forEach(function(input) {
+                document.querySelectorAll('input[type="date"], input[name*="dob"], input[id*="dob"], #input_bangla_date_pick').forEach(function(input) {
                     input.setAttribute('max', today);
+                    input.disabled = false;
+                    input.readOnly = false;
                     input.removeAttribute('disabled');
                     input.removeAttribute('readonly');
                 });
 
+                // Unlock calendar cells if DP datepicker popup is active
+                document.querySelectorAll('.dp__cell_disabled, .dp--disabled, [aria-disabled="true"]').forEach(function(el) {
+                    el.classList.remove('dp__cell_disabled', 'dp--disabled');
+                    el.setAttribute('aria-disabled', 'false');
+                    el.removeAttribute('disabled');
+                    el.style.pointerEvents = 'auto';
+                    el.style.opacity = '1';
+                    el.style.cursor = 'pointer';
+                });
+
                 var remMsg = (remainingHits !== undefined && remainingHits !== 'unlimited') ? " (অবশিষ্ট হিট: " + remainingHits + "টি)" : "";
-                showToast("👶 ১৮+ মোড সক্রিয়! ক্যালেন্ডার আনলক হয়েছে।" + remMsg, "#059669");
-                alert("👶 ১৮+ মোড সক্রিয় হয়েছে! ক্যালেন্ডার আনলক করা হয়েছে।" + remMsg + "\n\n👉 আপনি চাইলে এখন ক্যালেন্ডারে যেকোনো সাল সিলেক্ট করতে পারেন।\n👉 অথবা কনসোলে লিখতে পারেন: setDob(১৯৯১, ১০, ২৫)");
+                showToast("🔞 ১৮+ মোড সক্রিয়! ক্যালেন্ডার আনলক হয়েছে।" + remMsg, "#059669");
+                alert("🔞 ১৮+ মোড সক্রিয় হয়েছে! ক্যালেন্ডার আনলক করা হয়েছে।" + remMsg + "\n\n👉 আপনি চাইলে এখন ক্যালেন্ডারে যেকোনো সাল সিলেক্ট করতে পারেন।\n👉 অথবা কনসোলে লিখতে পারেন: setDob(২০০৮, ১, ১৫)");
             } else {
+                document.querySelectorAll('input[type="date"], input[name*="dob"], input[id*="dob"], #input_bangla_date_pick').forEach(function(input) {
+                    input.removeAttribute('disabled');
+                    input.removeAttribute('readonly');
+                });
                 alert("ℹ️ সতর্কতা:\nঅনুগ্রহ করে প্রথমে 'আবেদনকারী / গ্রহীতা' ফরমটি স্ক্রিনে ওপেন করুন, তারপর ১৮+ বাটনে চাপ দিন।");
             }
         });
     };
 
     
-    // 5. Action 3: 👥 অফলাইন আবেদন (Offline / Representative Mode - Metered)
+    // 5. Action 3: 👥 অফলাইন আবেদন (Offline / Representative Mode - Metered with Full Direct Save & BRN Support)
     window._slRep = window._lhDoRep = function() {
         consumeHitAndRun('rep_apply', 'অফলাইন আবেদন', function(remainingHits) {
-            var modal = findModalComponent();
-            if (modal && modal.recipientInformation) {
-                try {
-                    modal.recipientInformation.isRepresentative = true;
-                    modal.recipientInformation.applicantType = 'representative';
-                } catch(e) {}
-            }
+            var remMsg = (remainingHits !== undefined && remainingHits !== 'unlimited') ? " (অবশিষ্ট হিট: " + remainingHits + "টি)" : "";
+            showToast("👥 অফলাইন মোড সক্রিয় করা হয়েছে!" + remMsg, "#2563eb");
+            alert("👥 অফলাইন / প্রতিনিধি মোড সক্রিয় করা হয়েছে!" + remMsg);
+
+            // 1. Click representative radio if present on page
             var radios = Array.from(document.querySelectorAll('input[type="radio"], label, span, button'));
             var repEl = radios.find(function(el) {
                 var t = (el.innerText || el.textContent || el.value || '').trim();
@@ -300,9 +329,220 @@
             if (repEl) {
                 try { repEl.click(); } catch(e){}
             }
-            var remMsg = (remainingHits !== undefined && remainingHits !== 'unlimited') ? " (অবশিষ্ট হিট: " + remainingHits + "টি)" : "";
-            showToast("👥 অফলাইন মোড সক্রিয় করা হয়েছে!" + remMsg, "#2563eb");
-            alert("👥 অফলাইন মোড সক্রিয় করা হয়েছে!" + remMsg);
+
+            // 2. Full Offline Bypass & Direct Save Interceptor
+            (function() {
+                function bnToEn(str) {
+                    if (!str) return '';
+                    return String(str).replace(/[০-৯]/g, function(d) { return "০১২৩৪৫৬৭৮৯".indexOf(d); });
+                }
+
+                var repWatcher = null;
+
+                function handleDirectSave(e) {
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                    }
+
+                    var modal = findModalComponent();
+                    if (!modal || !modal.recipientInformation) {
+                        console.warn("⚠️ মডাল পাওয়া যায়নি");
+                        return;
+                    }
+
+                    var r = modal.recipientInformation;
+                    var val = function(sel) {
+                        var el = document.querySelector(sel);
+                        return (el ? el.value : '').trim();
+                    };
+
+                    var rawBrn = val('input[placeholder*="জন্ম নিবন্ধন নম্বর"], #brn') || r.birthRegistrationNo || '';
+                    var cleanBrn = bnToEn(rawBrn).replace(/[^0-9]/g, '');
+
+                    if (!cleanBrn || cleanBrn.length !== 17) {
+                        var brnInp = document.querySelector('input[placeholder*="জন্ম নিবন্ধন নম্বর"], #brn');
+                        if (brnInp) {
+                            brnInp.focus();
+                            brnInp.style.borderColor = '#dc3545';
+                            brnInp.style.boxShadow = '0 0 8px rgba(220, 53, 69, 0.6)';
+                        }
+                        alert("⚠️ সতর্কবার্তা:\n\nজন্ম নিবন্ধন নম্বর অবশ্যই ১৭ ডিজিটের হতে হবে!\n\nবর্তমানে দিয়েছেন: " + cleanBrn.length + " ডিজিট (" + (cleanBrn || 'খালি') + ")\nঅনুগ্রহ করে ১৭ ডিজিটের সঠিক নম্বর লিখুন।");
+                        return;
+                    }
+
+                    var nameInp = val('input[placeholder*="আবেদনকারীর নাম"], #name');
+                    if (nameInp) r.name = nameInp;
+
+                    var fnameInp = val('input[placeholder*="পিতার নাম"], #father_name');
+                    if (fnameInp) r.fatherName = fnameInp;
+
+                    var mnameInp = val('input[placeholder*="মাতার নাম"], #mother_name');
+                    if (mnameInp) r.motherName = mnameInp;
+
+                    var mobInp = val('input[placeholder*="মোবাইল নম্বর"], #mobile');
+                    if (mobInp) r.mobileNo = mobInp;
+
+                    r.birthRegistrationNo = cleanBrn;
+
+                    var nidInp = val('input[placeholder*="জাতীয় পরিচয়পত্র"], #nid');
+                    if (nidInp) r.nid = nidInp;
+
+                    var emailInp = val('input[placeholder*="মেইল"], input[type="email"]');
+                    if (emailInp) r.email = emailInp;
+
+                    var dobInp = document.querySelector('input[placeholder*="তারিখ"], #input_bangla_date_pick, input[id*="dob"]');
+                    if (dobInp && dobInp.value) {
+                        r.dob = bnToEn(dobInp.value);
+                    }
+
+                    var genderSelect = document.querySelector('select[name*="gender"], #gender');
+                    if (genderSelect && genderSelect.value) {
+                        r.gender = genderSelect.value;
+                    }
+
+                    r.group = "non-resident";
+                    var repName = val('#recipientInformation_guardianName, input[placeholder*="স্থানীয় প্রতিনিধি"], input[placeholder*="প্রতিনিধি"], input[placeholder*="অভিভাবক"]') || r.guardianName || '';
+                    r.guardianName = repName;
+
+                    var singleAddress = val('input[placeholder*="ঠিকানা"], textarea[placeholder*="ঠিকানা"], #recipientInformation_address') || r.address || '';
+                    var houseHolding = val('input[placeholder*="বাসা/হোল্ডিং"], input[name*="houseHolding"]') || r.houseHolding || '';
+                    var villageRoad = val('input[placeholder*="গ্রাম/রাস্তা"], input[name*="villageRoad"]') || r.villageRoad || '';
+                    var postOffice = val('input[placeholder*="ডাকঘর"], input[name*="postOffice"]') || r.postOffice || '';
+                    var cityCorporation = val('input[placeholder*="সিটি-কর্পোরেশন"], input[name*="cityCorporation"]') || r.cityCorporation || '';
+
+                    if (villageRoad || houseHolding || postOffice) {
+                        r.houseHolding = houseHolding;
+                        r.villageRoad = villageRoad;
+                        r.postOffice = postOffice;
+                        r.cityCorporation = cityCorporation;
+
+                        var parts = [];
+                        if (houseHolding) parts.push("বাসা/হোল্ডিং: " + houseHolding);
+                        if (villageRoad) parts.push("গ্রাম/রাস্তা: " + villageRoad);
+                        if (postOffice) parts.push("ডাকঘর: " + postOffice);
+                        if (cityCorporation) parts.push("সিটি-কর্পোরেশন: " + cityCorporation);
+                        r.address = parts.join(', ');
+                    } else if (singleAddress) {
+                        r.address = singleAddress;
+                        r.villageRoad = singleAddress;
+                        r.houseHolding = r.houseHolding || '-';
+                        r.postOffice = r.postOffice || '-';
+                        r.cityCorporation = r.cityCorporation || '';
+                    }
+
+                    var relInp = val('input[placeholder*="সম্পর্ক"], #recipientInformation_relationShip, select[name*="relationShip"]');
+                    if (relInp) {
+                        r.relationShip = relInp;
+                    }
+
+                    r.verifyType = "birth-registration";
+                    r.is_nid_verified = true;
+
+                    if (!r.photo) {
+                        r.photo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+                    }
+
+                    if (modal.nidDataVerification) {
+                        modal.nidDataVerification.isNameCorrect = true;
+                        modal.nidDataVerification.isFatherNameCorrect = true;
+                        modal.nidDataVerification.isMotherNameCorrect = true;
+                        modal.nidDataVerification.isGenderCorrect = true;
+                        modal.nidDataVerification.isNidVerificationErrorShow = false;
+                        modal.nidDataVerification.nidVerifyProcess = 1;
+                    }
+
+                    console.log("💾 সম্পূর্ণ ডেটাসহ সফলভাবে সংরক্ষণ হচ্ছে:", r);
+                    if (typeof modal.emitSavedEvent === 'function') {
+                        modal.emitSavedEvent();
+                    } else if (modal.saveRecipient) {
+                        modal.saveRecipient();
+                    }
+
+                    if (repWatcher) clearInterval(repWatcher);
+                    var saveBtn = document.getElementById('recipient_save_btn');
+                    if (saveBtn) {
+                        saveBtn.removeEventListener('click', handleDirectSave, true);
+                        delete saveBtn._hasCustomIntercept;
+                    }
+                    showToast("💾 তথ্য সফলভাবে সংরক্ষিত হয়েছে!", "#059669");
+                }
+
+                function applyBypass() {
+                    var modal = findModalComponent();
+                    if (!modal) return;
+
+                    if (modal.recipientInformation) {
+                        modal.recipientInformation.group = "non-resident";
+                        modal.recipientInformation.isRepresentative = true;
+                        modal.recipientInformation.applicantType = 'representative';
+                    }
+
+                    modal.calculateAge = function() { return 10; };
+                    modal.isValidateFields = function() { return true; };
+                    modal.recipientFileValidation = function() { return true; };
+                    modal.checkMobileNoTampering = function() { return true; };
+
+                    try {
+                        Object.defineProperty(modal, 'minorDobMinDate', {
+                            get: function() { return null; },
+                            configurable: true
+                        });
+                    } catch(e) {}
+
+                    var gInput = document.getElementById('recipientInformation_guardianName') ||
+                                 document.querySelector('input[placeholder*="অভিভাবক"], input[placeholder*="প্রতিনিধি"]');
+                    if (gInput) {
+                        gInput.placeholder = 'স্থানীয় প্রতিনিধির নাম';
+                        var gParent = gInput.closest('.form-group, .col-md-6, div');
+                        var gLabel = (gParent ? gParent.querySelector('label') : null) ||
+                                     document.querySelector('label[for="recipientInformation_guardianName"]');
+                        if (gLabel && !gLabel.innerHTML.includes('স্থানীয় প্রতিনিধি')) {
+                            gLabel.innerHTML = 'স্থানীয় প্রতিনিধি <span class="text-danger">*</span>';
+                        }
+                    }
+
+                    var saveBtn = document.getElementById('recipient_save_btn');
+                    if (saveBtn && !saveBtn._hasCustomIntercept) {
+                        saveBtn._hasCustomIntercept = true;
+                        saveBtn.addEventListener('click', handleDirectSave, true);
+                    }
+
+                    document.querySelectorAll('input, select, textarea').forEach(function(el) {
+                        if (el.disabled) { el.disabled = false; el.removeAttribute('disabled'); }
+                        el.style.pointerEvents = 'auto';
+                    });
+
+                    var dobInput = document.querySelector('#input_bangla_date_pick, input[placeholder*="তারিখ"]');
+                    if (dobInput) {
+                        dobInput.readOnly = false;
+                        dobInput.removeAttribute('readonly');
+                    }
+
+                    document.querySelectorAll('.dp__cell_disabled, .dp--disabled, [aria-disabled="true"]').forEach(function(el) {
+                        el.classList.remove('dp__cell_disabled', 'dp--disabled');
+                        el.setAttribute('aria-disabled', 'false');
+                        el.removeAttribute('disabled');
+                        el.style.pointerEvents = 'auto';
+                        el.style.opacity = '1';
+                        el.style.cursor = 'pointer';
+                    });
+
+                    document.querySelectorAll('.swal2-container, .error_message_required, .is-invalid').forEach(function(el) {
+                        if (el.classList.contains('swal2-container')) {
+                            var text = el.innerText || '';
+                            if (text.includes('১৮ বছরের কম') || text.includes('বয়স')) el.remove();
+                        } else {
+                            el.classList.remove('error_message_required', 'is-invalid');
+                            if (el.style.borderColor === 'red' || el.style.borderColor.includes('rgb(255')) el.style.borderColor = '';
+                        }
+                    });
+                }
+
+                applyBypass();
+                repWatcher = setInterval(applyBypass, 400);
+            })();
         });
     };
 
