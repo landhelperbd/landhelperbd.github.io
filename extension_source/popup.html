@@ -261,74 +261,6 @@
       cursor: pointer;
     }
     .change-key-link:hover { color: #94a3b8; }
-
-    /* Remote Live Notice Banner */
-    #remoteNoticeBanner {
-      display: none;
-      padding: 10px 12px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      line-height: 1.4;
-      animation: noticeFadeIn 0.25s ease-out;
-    }
-    @keyframes noticeFadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-    .notice-info {
-      background: rgba(37, 99, 235, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.45);
-      color: #bfdbfe;
-    }
-    .notice-warning {
-      background: rgba(217, 119, 6, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      color: #fde68a;
-    }
-    .notice-update {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.45);
-      color: #6ee7b7;
-    }
-    .notice-alert {
-      background: rgba(220, 38, 38, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.45);
-      color: #fca5a5;
-    }
-    .notice-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    #noticeCloseBtn {
-      background: transparent;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      color: inherit;
-      opacity: 0.7;
-      padding: 0 4px;
-      line-height: 1;
-    }
-    #noticeCloseBtn:hover { opacity: 1; }
-    #noticeBody {
-      margin-bottom: 6px;
-      opacity: 0.95;
-    }
-    #noticeActionBtn {
-      display: inline-block;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 11px;
-      margin-top: 4px;
-    }
-    .notice-info #noticeActionBtn { background: #2563eb; }
-    .notice-warning #noticeActionBtn { background: #d97706; }
-    .notice-update #noticeActionBtn { background: #059669; }
-    .notice-alert #noticeActionBtn { background: #dc2626; }
   </style>
 </head>
 <body>
@@ -336,24 +268,14 @@
     <img src="icon.png" class="logo-badge" alt="Logo" style="object-fit:cover;background:#ffffff;border-radius:10px;border:1px solid rgba(16,185,129,0.35);box-shadow:0 0 12px rgba(16,185,129,0.2);width:38px;height:38px;">
     <div>
       <div class="title">Land Helper BD Pro</div>
-      <div class="subtitle">নামজারি অটোমেশন ও সহকারী সিস্টেম</div>
+      <div class="subtitle">SaaS Automation Assistant</div>
     </div>
-  </div>
-
-  <!-- Remote Live Notice Banner (Controlled via GitHub / Server config.json) -->
-  <div id="remoteNoticeBanner">
-    <div class="notice-head">
-      <span id="noticeTitle">📢 জরুরি নোটিশ</span>
-      <button type="button" id="noticeCloseBtn" title="বন্ধ করুন">&times;</button>
-    </div>
-    <div id="noticeBody"></div>
-    <a id="noticeActionBtn" target="_blank" rel="noopener noreferrer"></a>
   </div>
 
   <!-- Navigation Tabs (Only shown when not active) -->
   <div class="nav-tabs" id="navTabs">
-    <div class="nav-tab active" id="tabRegister">রেজিস্ট্রেশন করুন</div>
-    <div class="nav-tab" id="tabLogin">লাইসেন্স কি</div>
+    <div class="nav-tab active" id="tabRegister">নতুন আবেদন</div>
+    <div class="nav-tab" id="tabLogin">লাইসেন্স লগইন</div>
   </div>
 
   <!-- 1. Registration Card -->
