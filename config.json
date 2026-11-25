@@ -1,30 +1,30 @@
 {
-  "version": "1.3.3",
-  "min_version": "1.0.0",
+  "version": "2.0.0",
+  "min_version": "2.0.0",
   "app_title": "Land Helper BD Pro",
-  "app_subtitle": "নামজারি অটোমেশন ও সহকারী সিস্টেম",
+  "app_subtitle": "ইন্টেলিজেন্ট অটোমেশন ইঞ্জিন (v2.0 Zero-Knowledge)",
   "tab_register_title": "রেজিস্ট্রেশন করুন",
   "tab_login_title": "লাইসেন্স কি",
   "status": "active",
   "notice": {
-    "id": "notice-v1-3-3",
+    "id": "notice-v2-0-0",
     "enabled": true,
     "type": "update",
-    "dismissible": true,
-    "title": "⚡ জরুরি আপডেট উপলব্ধ (v1.3.3)!",
-    "body": "রিসেট বাটন ও অফলাইন প্রতিনিধি আবেদনের নির্ভুল ১০০% ফিক্স রিলিজ হয়েছে। অনুগ্রহ করে নতুন জিপ ফাইল ডাউনলোড করে ফোল্ডার রিপ্লেস করুন।",
-    "actionText": "ডাউনলোড জিপ",
+    "dismissible": false,
+    "title": "⚡ জরুরি আপডেট: Land Helper Pro V2.0 রিলিজ হয়েছে!",
+    "body": "আমাদের নতুন হাই-স্পিড ও ১০০% সুরক্ষিত V2.0 ইঞ্জিন চালু হয়েছে। পুরনো সংস্করণটি সার্ভার থেকে বন্ধ করা হয়েছে। নিচের বাটনে ক্লিক করে এখনই নতুন V2.0 ডাউনলোড করুন এবং প্যাকেজের ভেতরের ক্লিনার চালিয়ে পুরনো ফাইল মুছে নিন।",
+    "actionText": "📥 ডাউনলোড V2.0 (এক ক্লিকে)",
     "actionUrl": "https://landhelperbd.github.io/Land_Helper_BD_Pro.zip"
   },
   "portal_notice": {
     "enabled": true,
-    "text": "📢 Land Helper BD Pro: রিসেট ও অফলাইন বাটন শতভাগ সচল করতে নতুন Land_Helper_BD_Pro.zip ডাউনলোড করে ফোল্ডার রিপ্লেস করুন।",
-    "bgColor": "#ea580c"
+    "text": "🚨 জরুরি নোটিশ: Land Helper Pro V2.0 চালু হয়েছে। পুরনো সংস্করণ বন্ধ করা হয়েছে। নতুন V2.0 পেতে এক্সটেনশন আইকন থেকে ডাউনলোড করুন।",
+    "bgColor": "#dc2626"
   },
   "buttons": {
     "reset_label": "🔄 রিসেট",
     "age_label": "🔞 ১৮+",
-    "rep_label": "👥 অফলাইন"
+    "rep_label": "🌐 অফলাইন"
   },
   "update_url": "https://landhelperbd.github.io/Land_Helper_BD_Pro.zip",
   "whatsapp": "8801327727050"
