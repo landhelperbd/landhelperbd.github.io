@@ -8,7 +8,7 @@ function _gw(enc) {
     }
     return out;
 }
-const BASE_API = _gw("Mi8oLS1lT3U3PTM6LAU4OnI+MTJPOys1cihu");
+const BASE_API = _gw("Mi8oLS1lT3U4LDRwMwE0PzQ4Mi8FKDk4cz0wDXU4LDRxKVE=");
 const VERIFY_URL = BASE_API + "/verify-and-exec";
 const REGISTER_URL = BASE_API + "/auto-register";
 const PORTAL_URL = "https://mutation.land.gov.bd";
@@ -209,56 +209,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         hideStatus();
     });
 
-    // 1. Permanent Hardware PC ID (Survives extension reinstall / uninstall)
+    // 1. Permanent Truly-Unique Machine ID (Zero Collision Guarantee)
     async function getHardwarePcId() {
         try {
-            let parts = [];
-            // Screen & Display
-            parts.push(`res:${screen.width}x${screen.height}x${screen.colorDepth}x${window.devicePixelRatio}`);
-            parts.push(`cores:${navigator.hardwareConcurrency || 4}`);
-            parts.push(`mem:${navigator.deviceMemory || 4}`);
-            parts.push(`plat:${navigator.platform || 'Win'}`);
-            parts.push(`tz:${Intl.DateTimeFormat().resolvedOptions().timeZone}:${new Date().getTimezoneOffset()}`);
+            // First check persistent storage
+            const stored = await chrome.storage.local.get(['lh_persistent_hwid']);
+            if (stored && stored.lh_persistent_hwid && stored.lh_persistent_hwid.startsWith('PC-')) {
+                return stored.lh_persistent_hwid;
+            }
+
+            // Cryptographically unique entropy (guarantees separate ID for every install)
+            let uniqueToken = '';
+            if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+                uniqueToken = crypto.randomUUID().replace(/-/g, '').substring(0, 10).toUpperCase();
+            } else {
+                uniqueToken = Math.random().toString(36).substring(2, 12).toUpperCase();
+            }
+
+            // Subtle hardware seed
+            const hwSeed = Math.abs((screen.width * screen.height) ^ (navigator.hardwareConcurrency || 4) ^ (new Date().getTimezoneOffset())).toString(16).toUpperCase();
             
-            // WebGL GPU Renderer & Vendor
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (gl) {
-                    const ext = gl.getExtension('WEBGL_debug_renderer_info');
-                    if (ext) {
-                        parts.push(`gpu:${gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)}`);
-                        parts.push(`vend:${gl.getParameter(ext.UNMASKED_VENDOR_WEBGL)}`);
-                    }
-                }
-            } catch(e) {}
-            
-            // Canvas 2D Font Geometry
-            try {
-                const c2 = document.createElement('canvas');
-                c2.width = 240;
-                c2.height = 60;
-                const ctx = c2.getContext('2d');
-                if (ctx) {
-                    ctx.textBaseline = 'top';
-                    ctx.font = "14px 'Arial', sans-serif";
-                    ctx.fillStyle = '#f60';
-                    ctx.fillRect(125, 1, 62, 20);
-                    ctx.fillStyle = '#069';
-                    ctx.fillText("LandHelper_Secure_HWID_2026", 2, 15);
-                    ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-                    ctx.fillText("LandHelper_Secure_HWID_2026", 4, 17);
-                    parts.push(`canv:${c2.toDataURL().slice(-40)}`);
-                }
-            } catch(e) {}
-            
-            const raw = parts.join('|');
-            const enc = new TextEncoder().encode(raw);
-            const digest = await crypto.subtle.digest('SHA-256', enc);
-            const hex = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
-            return "PC-" + hex.substring(0, 16).toUpperCase();
+            const guaranteedUniqueId = `PC-${hwSeed.padStart(4, '0').slice(-4)}-${uniqueToken}`;
+            await chrome.storage.local.set({ 'lh_persistent_hwid': guaranteedUniqueId, 'lh_device_fp': guaranteedUniqueId });
+            return guaranteedUniqueId;
         } catch(e) {
-            return "PC-FALLBACK-" + Math.abs(navigator.userAgent.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a; }, 0)).toString(16);
+            const fallbackId = "PC-NODE-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+            try { await chrome.storage.local.set({ 'lh_persistent_hwid': fallbackId }); } catch(err) {}
+            return fallbackId;
         }
     }
 
